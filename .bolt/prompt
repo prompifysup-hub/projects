@@ -1,0 +1,29 @@
+You are starting from the Prompify PROJECTS template: the open-source Jira clone (React 16 + Vite + styled-components + react-beautiful-dnd), extended with sprints, a backlog and a roadmap, and connected to Prompify's database. It is a finished project tracker: a drag-and-drop Kanban board (showing the active sprint), a Backlog with sprints (create, edit, start, complete, delete, drag issues between sprints), a Roadmap timeline of epics (drag bars to change dates, zoom weeks / months / quarters), an issue panel (type, status, assignees, reporter, priority, sprint, epic, estimates, time tracking, rich-text description, comments), issue search, issue creation and project settings. It is about 85% of a finished tool. Your job is the last 15%: adapt it to the user's team. Do not rebuild or restyle it.
+
+HOW IT IS ORGANISED
+- src/Project/: Board (Kanban), Backlog, Roadmap, IssueCreate, IssueSearch, ProjectSettings, Sidebar, NavbarLeft. The issue panel is src/Project/Board/IssueDetails.
+- src/shared/utils/api.js: what every screen calls (api.get('/project'), api.put('/issues/:id'), …). It is answered in the browser by src/shared/utils/server/index.js, which reads and writes the Prompify tables below. To add a field or a new kind of record, extend SCHEMA and the routes there.
+- src/shared/constants/issues.js: issue types, statuses (the board columns) and priorities with their labels. src/shared/constants/projects.js: project categories.
+- src/shared/utils/styles.js: colours, fonts and mixins. Reuse them for anything new.
+- src/shared/components: Button, Modal, Form, Select, Input, Avatar, Icon, DatePicker, ConfirmModal … Reuse them.
+- src/shared/utils/server/demoData.js: demo data used only outside Prompify. Leave it alone.
+
+TABLES THIS TEMPLATE USES (create them in ONE <boltAction type="data"> before the start action, in this order)
+- project (transactional): name text NOT NULL, url text, description text, category text ("software", "marketing" or "business")
+- users (transactional): name text NOT NULL, email text NOT NULL, avatar_url text   (the first user is the signed-in user)
+- sprints (transactional): name text NOT NULL, goal text, status text NOT NULL ("planned", "active" or "completed"; at most ONE active), start_date timestamptz, end_date timestamptz, position integer
+- epics (transactional): title text NOT NULL, description text, color text (hex, e.g. "#4FADE6"), start_date timestamptz, end_date timestamptz
+- issues (transactional): title text NOT NULL, type text NOT NULL ("task", "bug", "story"), status text NOT NULL ("backlog", "selected", "inprogress", "done"), priority text NOT NULL ("1" lowest … "5" highest), list_position numeric, backlog_position numeric, description text (HTML), description_text text, estimate integer, time_spent integer, time_remaining integer, reporter_id uuid references users.id, user_ids jsonb, sprint_id uuid, epic_id uuid, sprint_name text, epic_name text
+- comments (transactional): body text NOT NULL, issue_id uuid references issues.id, user_id uuid references users.id
+Sample rows: 1 project, 3-5 users, 1 active sprint (dates around today) and 1-2 planned sprints, 3-4 epics with dates spread over the next months, 15-25 issues, 5-10 comments, all matched to the user's team and work. Do not invent uuids: leave reporter_id, issue_id and user_id null (Prompify links them), leave sprint_id and epic_id null and instead put the sprint's name in sprint_name and the epic's title in epic_name (null = backlog / no epic), and put assignee NAMES in user_ids (e.g. ["Mia Lopez"]). The app turns these into ids on first load. Give issues list_position 1, 2, 3 … and estimates in hours.
+
+WHAT YOU SHOULD ADAPT
+1. The project in the data action (name, category, description) and the team in users.
+2. Wording for the team's domain: statuses and their labels (IssueStatusCopy), issue types (IssueTypeCopy, icons in shared/components/IssueTypeIcon), page titles. If you change statuses or types, change them in shared/constants/issues.js and the colours in shared/utils/styles.js together, and use the same values in sample rows.
+3. Extra issue fields the team needs (due date, labels, customer, cost…): add the column to the data action, the field to SCHEMA.issues in server/index.js, and a section to the issue panel (src/Project/Board/IssueDetails) using the existing Select / Input / DatePicker patterns; show it in the backlog row or board card if useful.
+4. Replace the logo in src/shared/components/Logo.jsx and the favicon if the user has a brand.
+
+RULES
+- Keep the Jira-style look and interactions. Do not add another UI library.
+- All data goes through api.js and server/index.js; never hardcode records in screens.
+- Every button must work. Do not add login or sign-up screens.
