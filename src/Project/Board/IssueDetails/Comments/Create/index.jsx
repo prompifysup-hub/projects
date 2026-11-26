@@ -8,6 +8,7 @@ import toast from 'shared/utils/toast';
 import BodyForm from '../BodyForm';
 import ProTip from './ProTip';
 import { Create, UserAvatar, Right, FakeTextarea } from './Styles';
+import { TEXT } from 'config/text';
 
 const propTypes = {
   issueId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
@@ -48,7 +49,7 @@ const ProjectBoardIssueDetailsCommentsCreate = ({ issueId, fetchIssue }) => {
           />
         ) : (
           <Fragment>
-            <FakeTextarea onClick={() => setFormOpen(true)}>Add a comment...</FakeTextarea>
+            <FakeTextarea onClick={() => setFormOpen(true)}>{TEXT.issue.addComment}</FakeTextarea>
             <ProTip setFormOpen={setFormOpen} />
           </Fragment>
         )}

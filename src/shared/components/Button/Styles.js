@@ -7,12 +7,12 @@ export const StyledButton = styled.button`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 32px;
+  height: calc(20px + 2 * var(--control-padding-y, 6px));
   vertical-align: middle;
   line-height: 1;
-  padding: 0 ${props => (props.iconOnly ? 9 : 12)}px;
+  padding: 0 ${props => (props.iconOnly ? '9px' : 'calc(var(--control-padding-x, 7px) + 5px)')};
   white-space: nowrap;
-  border-radius: 3px;
+  border-radius: var(--radius-button, 3px);
   transition: all 0.1s;
   appearance: none;
   ${mixin.clickable}
@@ -24,8 +24,10 @@ export const StyledButton = styled.button`
   }
 `;
 
+const textOn = { primary: color.textOnPrimary, success: color.textOnSuccess, danger: color.textOnDanger };
+
 const colored = css`
-  color: #fff;
+  color: ${props => textOn[props.variant]};
   background: ${props => color[props.variant]};
   ${font.medium}
   &:not(:disabled) {
@@ -72,7 +74,7 @@ const buttonVariants = {
     ${secondaryAndEmptyShared};
   `,
   empty: css`
-    background: #fff;
+    background: transparent;
     ${secondaryAndEmptyShared};
   `,
 };

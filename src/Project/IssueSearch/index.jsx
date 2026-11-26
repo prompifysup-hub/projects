@@ -1,11 +1,11 @@
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
-import { issueKey } from 'shared/utils/javascript';
+import { issueKey, sortByNewest } from 'shared/utils/javascript';
 import { Link } from 'react-router-dom';
 import { get } from 'lodash';
 
 import useApi from 'shared/hooks/api';
-import { sortByNewest } from 'shared/utils/javascript';
+import { IssueTypeCopy } from 'shared/constants/issues';
 import { IssueTypeIcon } from 'shared/components';
 
 import NoResultsSVG from './NoResultsSvg';
@@ -24,6 +24,7 @@ import {
   NoResultsTitle,
   NoResultsTip,
 } from './Styles';
+import { TEXT } from 'config/text';
 
 const propTypes = {
   project: PropTypes.object.isRequired,
@@ -53,7 +54,7 @@ const ProjectIssueSearch = ({ project }) => {
       <SearchInputCont>
         <SearchInputDebounced
           autoFocus
-          placeholder="Search issues by summary, description..."
+          placeholder={TEXT.search.placeholder}
           onChange={handleSearchChange}
         />
         <SearchIcon type="search" size={22} />
@@ -62,14 +63,14 @@ const ProjectIssueSearch = ({ project }) => {
 
       {isSearchTermEmpty && recentIssues.length > 0 && (
         <Fragment>
-          <SectionTitle>Recent Issues</SectionTitle>
+          <SectionTitle>{TEXT.search.recent}</SectionTitle>
           {recentIssues.map(renderIssue)}
         </Fragment>
       )}
 
       {!isSearchTermEmpty && matchingIssues.length > 0 && (
         <Fragment>
-          <SectionTitle>Matching Issues</SectionTitle>
+          <SectionTitle>{TEXT.search.matching}</SectionTitle>
           {matchingIssues.map(renderIssue)}
         </Fragment>
       )}
@@ -77,8 +78,8 @@ const ProjectIssueSearch = ({ project }) => {
       {!isSearchTermEmpty && !isLoading && matchingIssues.length === 0 && (
         <NoResults>
           <NoResultsSVG />
-          <NoResultsTitle>We couldn&apos;t find anything matching your search</NoResultsTitle>
-          <NoResultsTip>Try again with a different term.</NoResultsTip>
+          <NoResultsTitle>{TEXT.search.noResults}</NoResultsTitle>
+          <NoResultsTip>{TEXT.search.noResultsTip}</NoResultsTip>
         </NoResults>
       )}
     </IssueSearch>
@@ -91,7 +92,7 @@ const renderIssue = issue => (
       <IssueTypeIcon type={issue.type} size={25} />
       <IssueData>
         <IssueTitle>{issue.title}</IssueTitle>
-        <IssueTypeId>{issueKey(issue.type, issue.id)}</IssueTypeId>
+        <IssueTypeId>{issueKey(IssueTypeCopy[issue.type] || issue.type, issue.id)}</IssueTypeId>
       </IssueData>
     </Issue>
   </Link>

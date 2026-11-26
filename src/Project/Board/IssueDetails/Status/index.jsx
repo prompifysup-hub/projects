@@ -6,6 +6,7 @@ import { Select, Icon } from 'shared/components';
 
 import { SectionTitle } from '../Styles';
 import { Status } from './Styles';
+import { TEXT } from 'config/text';
 
 const propTypes = {
   issue: PropTypes.object.isRequired,
@@ -14,7 +15,7 @@ const propTypes = {
 
 const ProjectBoardIssueDetailsStatus = ({ issue, updateIssue }) => (
   <Fragment>
-    <SectionTitle>Status</SectionTitle>
+    <SectionTitle>{TEXT.issue.status}</SectionTitle>
     <Select
       variant="empty"
       dropdownWidth={343}

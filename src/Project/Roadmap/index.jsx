@@ -45,6 +45,8 @@ import {
   SprintBar,
   EmptyState,
 } from './Styles';
+import { TEXT } from 'config/text';
+import { STATUS, ROADMAP } from 'config/app';
 
 const propTypes = {
   project: PropTypes.object.isRequired,
@@ -53,9 +55,9 @@ const propTypes = {
 };
 
 const ZOOMS = {
-  weeks: { label: 'Weeks', dayWidth: 28, monthsBefore: 1, monthsAfter: 3 },
-  months: { label: 'Months', dayWidth: 8, monthsBefore: 1, monthsAfter: 8 },
-  quarters: { label: 'Quarters', dayWidth: 3, monthsBefore: 2, monthsAfter: 18 },
+  weeks: { label: TEXT.roadmap.zoom.weeks, dayWidth: 28, monthsBefore: 1, monthsAfter: 3 },
+  months: { label: TEXT.roadmap.zoom.months, dayWidth: 8, monthsBefore: 1, monthsAfter: 8 },
+  quarters: { label: TEXT.roadmap.zoom.quarters, dayWidth: 3, monthsBefore: 2, monthsAfter: 18 },
 };
 
 const day = value => moment(value).startOf('day');
@@ -63,7 +65,7 @@ const day = value => moment(value).startOf('day');
 const ProjectRoadmap = ({ project, fetchProject, updateLocalProjectIssues }) => {
   const match = useRouteMatch();
   const history = useHistory();
-  const [zoom, setZoom] = useState('months');
+  const [zoom, setZoom] = useState(ROADMAP.defaultZoom);
   const [expanded, setExpanded] = useState({});
   const [epicModal, setEpicModal] = useState(null); // {} for create, epic for edit
   const [drag, setDrag] = useState(null); // { epicId, mode, startX, start, end, moved }
@@ -110,10 +112,10 @@ const ProjectRoadmap = ({ project, fetchProject, updateLocalProjectIssues }) => 
   const saveEpic = async values => {
     if (epicModal && epicModal.id) {
       await api.put(`/epics/${epicModal.id}`, values);
-      toast.success('Epic updated.');
+      toast.success(TEXT.roadmap.updated);
     } else {
       await api.post('/epics', values);
-      toast.success('Epic created.');
+      toast.success(TEXT.roadmap.created);
     }
     await fetchProject();
   };
@@ -122,7 +124,7 @@ const ProjectRoadmap = ({ project, fetchProject, updateLocalProjectIssues }) => 
     try {
       await api.delete(`/epics/${epicModal.id}`);
       await fetchProject();
-      toast.success('Epic deleted.');
+      toast.success(TEXT.roadmap.deleted);
     } catch (error) {
       toast.error(error);
     }
@@ -174,7 +176,7 @@ const ProjectRoadmap = ({ project, fetchProject, updateLocalProjectIssues }) => 
   const scheduleAt = (event, epic) => {
     const left = event.currentTarget.getBoundingClientRect().left;
     const start = range.start.clone().add(Math.floor((event.clientX - left) / dayWidth), 'days');
-    saveDates(epic, start.toISOString(), start.clone().add(13, 'days').toISOString());
+    saveDates(epic, start.toISOString(), start.clone().add(ROADMAP.newEpicDays - 1, 'days').toISOString());
   };
 
   /* ----- render ----- */
@@ -185,9 +187,9 @@ const ProjectRoadmap = ({ project, fetchProject, updateLocalProjectIssues }) => 
 
   return (
     <Fragment>
-      <Breadcrumbs items={['Projects', project.name, 'Roadmap']} />
+      <Breadcrumbs items={[TEXT.nav.breadcrumbRoot, project.name, TEXT.roadmap.title]} />
       <Header>
-        <Title>Roadmap</Title>
+        <Title>{TEXT.roadmap.title}</Title>
         <HeaderActions>
           <Zoom>
             {Object.entries(ZOOMS).map(([key, { label }]) => (
@@ -197,17 +199,17 @@ const ProjectRoadmap = ({ project, fetchProject, updateLocalProjectIssues }) => 
             ))}
           </Zoom>
           <Button variant="primary" icon="plus" onClick={() => setEpicModal({})}>
-            Create epic
+            {TEXT.roadmap.createEpic}
           </Button>
         </HeaderActions>
       </Header>
 
       <Chart>
         <Left>
-          <LeftHeader>Epics</LeftHeader>
+          <LeftHeader>{TEXT.roadmap.epicsHeading}</LeftHeader>
           {epics.map(epic => {
             const issues = issuesOf(epic);
-            const done = issues.filter(issue => issue.status === 'done').length;
+            const done = issues.filter(issue => issue.status === STATUS.done).length;
             const percent = issues.length ? Math.round((done / issues.length) * 100) : 0;
             return (
               <Fragment key={epic.id}>
@@ -216,10 +218,10 @@ const ProjectRoadmap = ({ project, fetchProject, updateLocalProjectIssues }) => 
                     <Icon type={expanded[epic.id] ? 'chevron-down' : 'chevron-right'} />
                   </Chevron>
                   <EpicSquare color={epic.color} />
-                  <EpicTitle title="Edit epic" onClick={() => setEpicModal(epic)}>
+                  <EpicTitle title={TEXT.roadmap.editEpic} onClick={() => setEpicModal(epic)}>
                     {epic.title}
                   </EpicTitle>
-                  <Progress title={`${done} of ${issues.length} issues done`}>
+                  <Progress title={TEXT.roadmap.progress(done, issues.length)}>
                     <ProgressBar percent={percent}>
                       <div />
                     </ProgressBar>
@@ -230,7 +232,7 @@ const ProjectRoadmap = ({ project, fetchProject, updateLocalProjectIssues }) => 
                   issues.map(issue => (
                     <ChildRow key={issue.id} onClick={() => openIssue(issue.id)}>
                       <IssueTypeIcon type={issue.type} size={16} />
-                      <ChildTitle isDone={issue.status === 'done'}>{issue.title}</ChildTitle>
+                      <ChildTitle isDone={issue.status === STATUS.done}>{issue.title}</ChildTitle>
                       <StatusDot color={issueStatusBackgroundColors[issue.status]} title={issue.status} />
                     </ChildRow>
                   ))}
@@ -239,7 +241,7 @@ const ProjectRoadmap = ({ project, fetchProject, updateLocalProjectIssues }) => 
           })}
           <CreateEpic onClick={() => setEpicModal({})}>
             <Icon type="plus" size={18} />
-            Create epic
+            {TEXT.roadmap.createEpic}
           </CreateEpic>
         </Left>
 
@@ -270,7 +272,7 @@ const ProjectRoadmap = ({ project, fetchProject, updateLocalProjectIssues }) => 
 
             {epics.map(epic => {
               const issues = issuesOf(epic);
-              const done = issues.filter(issue => issue.status === 'done').length;
+              const done = issues.filter(issue => issue.status === STATUS.done).length;
               const isScheduled = epic.startDate && epic.endDate;
               const { start, end } = isScheduled ? datesFor(epic) : {};
               return (
@@ -323,7 +325,7 @@ const ProjectRoadmap = ({ project, fetchProject, updateLocalProjectIssues }) => 
         </Right>
       </Chart>
 
-      {epics.length === 0 && <EmptyState>No epics yet. Create one to plan larger pieces of work on the timeline.</EmptyState>}
+      {epics.length === 0 && <EmptyState>{TEXT.roadmap.empty}</EmptyState>}
 
       {epicModal && (
         <Modal

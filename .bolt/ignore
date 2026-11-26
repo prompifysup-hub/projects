@@ -3,8 +3,9 @@ src/App/NormalizeStyles.js
 src/shared/utils/server/prompify.js
 src/shared/utils/server/demoData.js
 src/shared/hooks/**
+src/shared/constants/**
 src/shared/components/TextEditor/**
-src/shared/components/DatePicker/**
-src/shared/components/Select/**
-src/shared/components/Modal/**
+src/shared/components/DatePicker/*.jsx
+src/shared/components/Select/*.jsx
+src/shared/components/Modal/*.jsx
 LICENSE

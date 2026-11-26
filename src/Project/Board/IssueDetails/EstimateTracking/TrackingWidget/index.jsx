@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { isNil } from 'lodash';
 
 import { TrackingWidget, WatchIcon, Right, BarCont, Bar, Values } from './Styles';
+import { TEXT } from 'config/text';
 
 const propTypes = {
   issue: PropTypes.object.isRequired,
@@ -16,7 +17,7 @@ const ProjectBoardIssueDetailsTrackingWidget = ({ issue }) => (
         <Bar width={calculateTrackingBarWidth(issue)} />
       </BarCont>
       <Values>
-        <div>{issue.timeSpent ? `${issue.timeSpent}h logged` : 'No time logged'}</div>
+        <div>{issue.timeSpent ? TEXT.issue.logged(issue.timeSpent) : TEXT.issue.noTimeLogged}</div>
         {renderRemainingOrEstimate(issue)}
       </Values>
     </Right>
@@ -43,10 +44,10 @@ const renderRemainingOrEstimate = ({ timeRemaining, estimate }) => {
     return null;
   }
   if (!isNil(timeRemaining)) {
-    return <div>{`${timeRemaining}h remaining`}</div>;
+    return <div>{TEXT.issue.remaining(timeRemaining)}</div>;
   }
   if (!isNil(estimate)) {
-    return <div>{`${estimate}h estimated`}</div>;
+    return <div>{TEXT.issue.estimated(estimate)}</div>;
   }
 };
 

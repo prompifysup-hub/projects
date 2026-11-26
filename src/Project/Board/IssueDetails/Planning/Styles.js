@@ -9,7 +9,7 @@ export const Item = styled.div`
     props.isValue &&
     css`
       padding: 3px 4px 3px 0px;
-      border-radius: 4px;
+      border-radius: var(--radius, 4px);
       &:hover,
       &:focus {
         background: ${color.backgroundLight};
@@ -27,6 +27,6 @@ export const EpicColor = styled.span`
   width: 12px;
   height: 12px;
   margin-right: 8px;
-  border-radius: 3px;
+  border-radius: var(--radius, 3px);
   background: ${props => props.color};
 `;

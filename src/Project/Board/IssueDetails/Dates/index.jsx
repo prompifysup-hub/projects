@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { formatDateTimeConversational } from 'shared/utils/dateTime';
 
 import { Dates } from './Styles';
+import { TEXT } from 'config/text';
 
 const propTypes = {
   issue: PropTypes.object.isRequired,
@@ -11,8 +12,8 @@ const propTypes = {
 
 const ProjectBoardIssueDetailsDates = ({ issue }) => (
   <Dates>
-    <div>Created at {formatDateTimeConversational(issue.createdAt)}</div>
-    <div>Updated at {formatDateTimeConversational(issue.updatedAt)}</div>
+    <div>{TEXT.issue.created(formatDateTimeConversational(issue.createdAt))}</div>
+    <div>{TEXT.issue.updated(formatDateTimeConversational(issue.updatedAt))}</div>
   </Dates>
 );
 

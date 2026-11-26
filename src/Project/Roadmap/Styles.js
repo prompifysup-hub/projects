@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
 
 import { color, font, mixin } from 'shared/utils/styles';
+import { TEXT } from 'config/text';
 
 export const ROW_HEIGHT = 44;
 export const CHILD_HEIGHT = 36;
@@ -16,7 +17,7 @@ export const Header = styled.div`
 
 export const Title = styled.div`
   ${font.size(24)}
-  ${font.medium}
+  ${font.heading}
 `;
 
 export const HeaderActions = styled.div`
@@ -33,10 +34,10 @@ export const Zoom = styled.div`
     border-radius: 0;
   }
   & > button:first-child {
-    border-radius: 3px 0 0 3px;
+    border-radius: var(--radius-button, 3px) 0 0 var(--radius-button, 3px);
   }
   & > button:last-child {
-    border-radius: 0 3px 3px 0;
+    border-radius: 0 var(--radius-button, 3px) var(--radius-button, 3px) 0;
   }
 `;
 
@@ -44,8 +45,8 @@ export const Chart = styled.div`
   display: flex;
   margin-top: 24px;
   border: 1px solid ${color.borderLightest};
-  border-radius: 3px;
-  background: #fff;
+  border-radius: var(--radius, 3px);
+  background: ${color.backgroundWhite};
 `;
 
 export const Left = styled.div`
@@ -89,7 +90,7 @@ export const EpicSquare = styled.span`
   width: 14px;
   height: 14px;
   margin: 0 10px 0 4px;
-  border-radius: 3px;
+  border-radius: var(--radius, 3px);
   background: ${props => props.color};
 `;
 
@@ -119,7 +120,7 @@ export const ProgressBar = styled.div`
   width: 48px;
   height: 6px;
   margin-right: 6px;
-  border-radius: 3px;
+  border-radius: var(--radius, 3px);
   overflow: hidden;
   background: ${color.backgroundMedium};
   div {
@@ -232,17 +233,17 @@ export const TodayLine = styled.div`
   top: 0;
   bottom: 0;
   width: 2px;
-  background: ${color.primary};
+  background: ${color.accent};
   z-index: 2;
   &:before {
-    content: 'Today';
+    content: '${TEXT.roadmap.today}';
     position: absolute;
     top: 2px;
     left: 4px;
     padding: 1px 5px;
-    border-radius: 3px;
-    color: #fff;
-    background: ${color.primary};
+    border-radius: var(--radius, 3px);
+    color: ${color.textOnAccent};
+    background: ${color.accent};
     ${font.bold}
     ${font.size(10.5)}
   }
@@ -258,7 +259,7 @@ export const TimelineRow = styled.div`
     css`
       cursor: copy;
       &:hover:after {
-        content: 'Click to schedule this epic';
+        content: '${TEXT.roadmap.schedule}';
         position: absolute;
         top: 12px;
         left: ${props.hintLeft}px;
@@ -273,7 +274,7 @@ export const Bar = styled.div`
   position: absolute;
   top: 9px;
   height: ${ROW_HEIGHT - 18}px;
-  border-radius: 4px;
+  border-radius: var(--radius, 4px);
   background: ${props => mixin.rgba(props.color, 0.85)};
   box-shadow: inset 0 0 0 1px ${props => mixin.darken(props.color, 0.15)};
   cursor: grab;
@@ -286,7 +287,7 @@ export const BarProgress = styled.div`
   left: 0;
   top: 0;
   bottom: 0;
-  border-radius: 4px 0 0 4px;
+  border-radius: var(--radius, 4px) 0 0 var(--radius, 4px);
   background: rgba(0, 0, 0, 0.15);
   width: ${props => props.percent}%;
   pointer-events: none;

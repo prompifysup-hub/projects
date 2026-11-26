@@ -8,6 +8,8 @@ import { IssueStatusCopy } from 'shared/constants/issues';
 
 import Issue from './Issue';
 import { List, Title, IssuesCount, Issues } from './Styles';
+import { TEXT } from 'config/text';
+import { BOARD } from 'config/app';
 
 const propTypes = {
   status: PropTypes.string.isRequired,
@@ -63,7 +65,7 @@ const filterIssues = (projectIssues, filters, currentUserId) => {
     issues = issues.filter(issue => issue.userIds.includes(currentUserId));
   }
   if (recent) {
-    issues = issues.filter(issue => moment(issue.updatedAt).isAfter(moment().subtract(3, 'days')));
+    issues = issues.filter(issue => moment(issue.updatedAt).isAfter(moment().subtract(BOARD.recentDays, 'days')));
   }
   return issues;
 };
@@ -73,7 +75,7 @@ const getSortedListIssues = (issues, status) =>
 
 const formatIssuesCount = (allListIssues, filteredListIssues) => {
   if (allListIssues.length !== filteredListIssues.length) {
-    return `${filteredListIssues.length} of ${allListIssues.length}`;
+    return TEXT.board.count(filteredListIssues.length, allListIssues.length);
   }
   return allListIssues.length;
 };

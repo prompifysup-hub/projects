@@ -14,8 +14,9 @@ import {
   Divider,
   LinkItem,
   LinkText,
-  NotImplemented,
 } from './Styles';
+import { TEXT } from 'config/text';
+import { FEATURES } from 'config/app';
 
 const propTypes = {
   project: PropTypes.object.isRequired,
@@ -27,37 +28,28 @@ const ProjectSidebar = ({ project }) => {
   return (
     <Sidebar>
       <ProjectInfo>
-        <ProjectAvatar />
+        <ProjectAvatar name={project.name} />
         <ProjectTexts>
           <ProjectName>{project.name}</ProjectName>
-          <ProjectCategory>{ProjectCategoryCopy[project.category]} project</ProjectCategory>
+          <ProjectCategory>{TEXT.nav.category(ProjectCategoryCopy[project.category] || '')}</ProjectCategory>
         </ProjectTexts>
       </ProjectInfo>
 
-      {renderLinkItem(match, 'Kanban Board', 'board', '/board')}
-      {renderLinkItem(match, 'Backlog', 'issues', '/backlog')}
-      {renderLinkItem(match, 'Roadmap', 'calendar', '/roadmap')}
+      {renderLinkItem(match, TEXT.nav.board, 'board', '/board')}
+      {FEATURES.sprints && renderLinkItem(match, TEXT.nav.backlog, 'issues', '/backlog')}
+      {FEATURES.roadmap && renderLinkItem(match, TEXT.nav.roadmap, 'calendar', '/roadmap')}
       <Divider />
-      {renderLinkItem(match, 'Project settings', 'settings', '/settings')}
+      {renderLinkItem(match, TEXT.nav.settings, 'settings', '/settings')}
     </Sidebar>
   );
 };
 
-const renderLinkItem = (match, text, iconType, path) => {
-  const isImplemented = !!path;
-
-  const linkItemProps = isImplemented
-    ? { as: NavLink, exact: true, to: `${match.path}${path}` }
-    : { as: 'div' };
-
-  return (
-    <LinkItem {...linkItemProps}>
-      <Icon type={iconType} />
-      <LinkText>{text}</LinkText>
-      {!isImplemented && <NotImplemented>Not implemented</NotImplemented>}
-    </LinkItem>
-  );
-};
+const renderLinkItem = (match, text, iconType, path) => (
+  <LinkItem as={NavLink} exact to={`${match.path}${path}`}>
+    <Icon type={iconType} />
+    <LinkText>{text}</LinkText>
+  </LinkItem>
+);
 
 ProjectSidebar.propTypes = propTypes;
 

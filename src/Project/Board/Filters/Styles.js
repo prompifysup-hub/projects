@@ -33,7 +33,7 @@ export const AvatarIsActiveBorder = styled.div`
 `;
 
 export const StyledAvatar = styled(Avatar)`
-  box-shadow: 0 0 0 2px #fff;
+  box-shadow: 0 0 0 2px ${color.backgroundPage};
 `;
 
 export const StyledButton = styled(Button)`

@@ -10,10 +10,10 @@ export const IssueLink = styled(Link)`
 `;
 
 export const Issue = styled.div`
-  padding: 10px;
-  border-radius: 3px;
-  background: #fff;
-  box-shadow: 0px 1px 2px 0px rgba(9, 30, 66, 0.25);
+  padding: var(--card-padding, 10px);
+  border-radius: var(--radius, 3px);
+  background: ${color.backgroundWhite};
+  box-shadow: var(--shadow-card, 0px 1px 2px 0px rgba(9, 30, 66, 0.25));
   transition: background 0.1s;
   ${mixin.clickable}
   @media (max-width: 1100px) {
@@ -52,5 +52,5 @@ export const Assignees = styled.div`
 
 export const AssigneeAvatar = styled(Avatar)`
   margin-left: -2px;
-  box-shadow: 0 0 0 2px #fff;
+  box-shadow: 0 0 0 2px ${color.backgroundWhite};
 `;

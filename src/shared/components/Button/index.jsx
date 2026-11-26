@@ -60,7 +60,8 @@ const Button = forwardRef(
 );
 
 const getIconColor = variant =>
-  ['secondary', 'empty'].includes(variant) ? color.textDark : '#fff';
+  ({ primary: color.textOnPrimary, success: color.textOnSuccess, danger: color.textOnDanger }[variant] ||
+  color.textDark);
 
 Button.propTypes = propTypes;
 Button.defaultProps = defaultProps;

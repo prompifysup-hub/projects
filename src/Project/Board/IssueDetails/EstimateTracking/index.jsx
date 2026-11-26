@@ -15,6 +15,7 @@ import {
   InputLabel,
   Actions,
 } from './Styles';
+import { TEXT } from 'config/text';
 
 const propTypes = {
   issue: PropTypes.object.isRequired,
@@ -23,10 +24,10 @@ const propTypes = {
 
 const ProjectBoardIssueDetailsEstimateTracking = ({ issue, updateIssue }) => (
   <Fragment>
-    <SectionTitle>Original Estimate (hours)</SectionTitle>
+    <SectionTitle>{TEXT.issue.estimate}</SectionTitle>
     {renderHourInput('estimate', issue, updateIssue)}
 
-    <SectionTitle>Time Tracking</SectionTitle>
+    <SectionTitle>{TEXT.issue.timeTracking}</SectionTitle>
     <Modal
       testid="modal:tracking"
       width={400}
@@ -37,21 +38,21 @@ const ProjectBoardIssueDetailsEstimateTracking = ({ issue, updateIssue }) => (
       )}
       renderContent={modal => (
         <ModalContents>
-          <ModalTitle>Time tracking</ModalTitle>
+          <ModalTitle>{TEXT.issue.timeTrackingTitle}</ModalTitle>
           <TrackingWidget issue={issue} />
           <Inputs>
             <InputCont>
-              <InputLabel>Time spent (hours)</InputLabel>
+              <InputLabel>{TEXT.issue.timeSpent}</InputLabel>
               {renderHourInput('timeSpent', issue, updateIssue)}
             </InputCont>
             <InputCont>
-              <InputLabel>Time remaining (hours)</InputLabel>
+              <InputLabel>{TEXT.issue.timeRemaining}</InputLabel>
               {renderHourInput('timeRemaining', issue, updateIssue)}
             </InputCont>
           </Inputs>
           <Actions>
             <Button variant="primary" onClick={modal.close}>
-              Done
+              {TEXT.common.done}
             </Button>
           </Actions>
         </ModalContents>
@@ -62,7 +63,7 @@ const ProjectBoardIssueDetailsEstimateTracking = ({ issue, updateIssue }) => (
 
 const renderHourInput = (fieldName, issue, updateIssue) => (
   <InputDebounced
-    placeholder="Number"
+    placeholder={TEXT.issue.number}
     filter={/^\d{0,6}$/}
     value={isNil(issue[fieldName]) ? '' : issue[fieldName]}
     onChange={stringValue => {

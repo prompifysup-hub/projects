@@ -15,8 +15,8 @@ export const StyledToast = styled.div`
   margin-bottom: 5px;
   width: 300px;
   padding: 15px 20px;
-  border-radius: 3px;
-  color: #fff;
+  border-radius: var(--radius, 3px);
+  color: ${props => (props.type === 'danger' ? color.textOnDanger : color.textOnSuccess)};
   background: ${props => color[props.type]};
   cursor: pointer;
   transition: all 0.15s;
@@ -42,7 +42,7 @@ export const CloseIcon = styled(Icon)`
   right: 14px;
   font-size: 22px;
   cursor: pointer;
-  color: #fff;
+  color: inherit;
 `;
 
 export const Title = styled.div`

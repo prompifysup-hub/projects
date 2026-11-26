@@ -12,8 +12,8 @@ export default defineConfig({
     alias: {
       shared: src('shared'),
       App: src('App'),
-      Auth: src('Auth'),
       Project: src('Project'),
+      config: src('config'),
       browserHistory: src('browserHistory.js'),
     },
   },

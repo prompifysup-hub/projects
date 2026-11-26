@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { Textarea } from 'shared/components';
 
 import { Actions, FormButton } from './Styles';
+import { TEXT } from 'config/text';
 
 const propTypes = {
   value: PropTypes.string.isRequired,
@@ -32,17 +33,17 @@ const ProjectBoardIssueDetailsCommentsBodyForm = ({
     <Fragment>
       <Textarea
         autoFocus
-        placeholder="Add a comment..."
+        placeholder={TEXT.issue.addComment}
         value={value}
         onChange={onChange}
         ref={$textareaRef}
       />
       <Actions>
         <FormButton variant="primary" isWorking={isWorking} onClick={handleSubmit}>
-          Save
+          {TEXT.common.save}
         </FormButton>
         <FormButton variant="empty" onClick={onCancel}>
-          Cancel
+          {TEXT.common.cancel}
         </FormButton>
       </Actions>
     </Fragment>

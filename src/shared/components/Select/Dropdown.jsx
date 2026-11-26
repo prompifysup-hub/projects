@@ -5,6 +5,7 @@ import { uniq } from 'lodash';
 import { KeyCodes } from 'shared/constants/keyCodes';
 
 import { ClearIcon, Dropdown, DropdownInput, Options, Option, OptionsNoResults } from './Styles';
+import { TEXT } from 'config/text';
 
 const propTypes = {
   dropdownWidth: PropTypes.number,
@@ -178,7 +179,7 @@ const SelectDropdown = ({
     <Dropdown width={dropdownWidth}>
       <DropdownInput
         type="text"
-        placeholder="Search"
+        placeholder={TEXT.common.search}
         ref={$inputRef}
         autoFocus
         onKeyDown={handleInputKeyDown}
@@ -206,12 +207,12 @@ const SelectDropdown = ({
             onMouseEnter={handleOptionMouseEnter}
             onClick={() => createOption(searchValue)}
           >
-            {isCreatingOption ? `Creating "${searchValue}"...` : `Create "${searchValue}"`}
+            {isCreatingOption ? TEXT.common.creating(searchValue) : TEXT.common.createValue(searchValue)}
           </Option>
         )}
       </Options>
 
-      {filteredOptions.length === 0 && <OptionsNoResults>No results</OptionsNoResults>}
+      {filteredOptions.length === 0 && <OptionsNoResults>{TEXT.common.noResults}</OptionsNoResults>}
     </Dropdown>
   );
 };

@@ -1,60 +1,63 @@
 import { css } from 'styled-components';
 import Color from 'color';
 
-import { IssueType, IssueStatus, IssuePriority } from 'shared/constants/issues';
+import { ISSUE_TYPES, STATUSES, PRIORITIES } from 'config/app';
+
+/*
+ * Colours come from the theme (src/theme.css, rewritten by Prompify from the user's palette and
+ * style). Values are CSS expressions on the theme's "R G B" variables; never write raw colours in a
+ * Styles.js file, add a name here instead. Shades the theme does not define are mixed from it.
+ */
+const v = name => `rgb(var(--${name}))`;
+const mix = (a, percent, b) => `color-mix(in srgb, ${a} ${percent}%, ${b})`;
 
 export const color = {
-  primary: '#0052cc', // Blue
-  success: '#0B875B', // green
-  danger: '#E13C3C', // red
-  warning: '#F89C1C', // orange
-  secondary: '#F4F5F7', // light grey
+  primary: v('primary'),
+  success: v('success'),
+  danger: v('destructive'),
+  warning: v('warning'),
+  secondary: v('muted'), // secondary buttons
+  accent: v('accent'), // the roadmap's Today marker
 
-  textDarkest: '#172b4d',
-  textDark: '#42526E',
-  textMedium: '#5E6C84',
-  textLight: '#8993a4',
-  textLink: '#0052cc',
+  textDarkest: v('foreground'),
+  textDark: mix(v('foreground'), 75, v('muted-foreground')),
+  textMedium: v('muted-foreground'),
+  textLight: mix(v('muted-foreground'), 75, v('card')),
+  textLink: v('primary'),
+  textOnPrimary: v('primary-foreground'),
+  textOnAccent: v('accent-foreground'),
+  textOnDanger: v('destructive-foreground'),
+  textOnSuccess: v('card'),
 
-  backgroundDarkPrimary: '#0747A6',
-  backgroundMedium: '#dfe1e6',
-  backgroundLight: '#ebecf0',
-  backgroundLightest: '#F4F5F7',
-  backgroundLightPrimary: '#D2E5FE',
-  backgroundLightSuccess: '#E4FCEF',
+  backgroundPage: v('background'),
+  backgroundWhite: v('card'), // cards, dialogs, dropdowns, focused inputs
+  backgroundDarkPrimary: mix(v('primary'), 82, 'black'), // the left bar
+  backgroundMedium: mix(v('muted'), 92, v('foreground')), // tags, neutral statuses
+  backgroundLight: mix(v('muted'), 96, v('foreground')), // hover
+  backgroundLightest: v('muted'), // sidebar, board columns, inputs
+  backgroundLightPrimary: mix(v('primary'), 18, v('card')),
+  backgroundLightSuccess: mix(v('success'), 15, v('card')),
 
-  borderLightest: '#dfe1e6',
-  borderLight: '#C1C7D0',
-  borderInputFocus: '#4c9aff',
+  borderLightest: v('border'),
+  borderLight: mix(v('border'), 80, v('muted-foreground')),
+  borderInputFocus: v('ring'),
 };
 
-export const issueTypeColors = {
-  [IssueType.TASK]: '#4FADE6', // blue
-  [IssueType.BUG]: '#E44D42', // red
-  [IssueType.STORY]: '#65BA43', // green
-};
+// Icon colours of issue types and priorities come from src/config/app.js (label colours).
+export const issueTypeColors = Object.fromEntries(ISSUE_TYPES.map(t => [t.value, t.color]));
+export const issuePriorityColors = Object.fromEntries(PRIORITIES.map(p => [p.value, p.color]));
 
-export const issuePriorityColors = {
-  [IssuePriority.HIGHEST]: '#CD1317', // red
-  [IssuePriority.HIGH]: '#E9494A', // orange
-  [IssuePriority.MEDIUM]: '#E97F33', // orange
-  [IssuePriority.LOW]: '#2D8738', // green
-  [IssuePriority.LOWEST]: '#57A55A', // green
+// Status tags: the `tone` of each status in src/config/app.js picks a theme colour.
+const TONES = {
+  neutral: { background: color.backgroundMedium, text: color.textDark },
+  primary: { background: color.primary, text: color.textOnPrimary },
+  success: { background: color.success, text: color.textOnSuccess },
+  warning: { background: color.warning, text: color.textDarkest },
+  danger: { background: color.danger, text: color.textOnDanger },
 };
-
-export const issueStatusColors = {
-  [IssueStatus.BACKLOG]: color.textDark,
-  [IssueStatus.INPROGRESS]: '#fff',
-  [IssueStatus.SELECTED]: color.textDark,
-  [IssueStatus.DONE]: '#fff',
-};
-
-export const issueStatusBackgroundColors = {
-  [IssueStatus.BACKLOG]: color.backgroundMedium,
-  [IssueStatus.INPROGRESS]: color.primary,
-  [IssueStatus.SELECTED]: color.backgroundMedium,
-  [IssueStatus.DONE]: color.success,
-};
+const toneOf = status => TONES[status.tone] || TONES.neutral;
+export const issueStatusColors = Object.fromEntries(STATUSES.map(s => [s.value, toneOf(s).text]));
+export const issueStatusBackgroundColors = Object.fromEntries(STATUSES.map(s => [s.value, toneOf(s).background]));
 
 export const sizes = {
   appNavBarLeftWidth: 64,
@@ -68,27 +71,34 @@ export const zIndexValues = {
   navLeft: 100,
 };
 
+const sans = 'font-family: var(--font-sans, system-ui, sans-serif);';
+
+// Sizes are written in px for the default 16px base and scale with the theme's --font-size-base.
 export const font = {
-  regular: 'font-family: "CircularStdBook"; font-weight: normal;',
-  medium: 'font-family: "CircularStdMedium"; font-weight: normal;',
-  bold: 'font-family: "CircularStdBold"; font-weight: normal;',
-  black: 'font-family: "CircularStdBlack"; font-weight: normal;',
-  size: size => `font-size: ${size}px;`,
+  regular: `${sans} font-weight: 400;`,
+  medium: `${sans} font-weight: 500;`,
+  bold: `${sans} font-weight: 700;`,
+  black: `${sans} font-weight: 800;`,
+  heading: `${sans} font-weight: var(--heading-weight, 500);`, // page and dialog titles
+  size: size => `font-size: calc(${size / 16} * var(--font-size-base, 16px));`,
 };
 
+const isPlainColor = value => /^(#|rgba?\(\d)/.test(String(value));
+
 export const mixin = {
+  // Hex colours (epic and label colours) use the color library; theme colours use color-mix.
   darken: (colorValue, amount) =>
-    Color(colorValue)
-      .darken(amount)
-      .string(),
+    isPlainColor(colorValue)
+      ? Color(colorValue).darken(amount).string()
+      : `color-mix(in srgb, ${colorValue} ${Math.round((1 - amount) * 100)}%, black)`,
   lighten: (colorValue, amount) =>
-    Color(colorValue)
-      .lighten(amount)
-      .string(),
+    isPlainColor(colorValue)
+      ? Color(colorValue).lighten(amount).string()
+      : `color-mix(in srgb, ${colorValue} ${Math.round((1 - amount) * 100)}%, white)`,
   rgba: (colorValue, opacity) =>
-    Color(colorValue)
-      .alpha(opacity)
-      .string(),
+    isPlainColor(colorValue)
+      ? Color(colorValue).alpha(opacity).string()
+      : `color-mix(in srgb, ${colorValue} ${Math.round(opacity * 100)}%, transparent)`,
   boxShadowMedium: css`
     box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
   `,
@@ -172,7 +182,7 @@ export const mixin = {
     align-items: center;
     height: 24px;
     padding: 0 8px;
-    border-radius: 4px;
+    border-radius: var(--radius-badge, var(--radius, 4px));
     cursor: pointer;
     user-select: none;
     color: ${colorValue};

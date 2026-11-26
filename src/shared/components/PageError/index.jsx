@@ -1,18 +1,18 @@
 import React from 'react';
 
-import { ErrorPage, ErrorPageInner, ErrorBox, StyledIcon, Title } from './Styles';
+import { ErrorPage, ErrorPageInner, ErrorBox, StyledIcon, Title, ReloadButton } from './Styles';
+import { TEXT } from 'config/text';
 
 const PageError = () => (
   <ErrorPage>
     <ErrorPageInner>
       <ErrorBox>
         <StyledIcon type="bug" />
-        <Title>There’s been a glitch…</Title>
-        <p>
-          {'We’re not quite sure what went wrong. Please contact us or try looking on our '}
-          <a href="https://support.atlassian.com/jira-software-cloud/">Help Center</a>
-          {' if you need a hand.'}
-        </p>
+        <Title>{TEXT.errors.pageTitle}</Title>
+        <p>{TEXT.errors.pageMessage}</p>
+        <ReloadButton variant="primary" onClick={() => window.location.reload()}>
+          {TEXT.errors.reload}
+        </ReloadButton>
       </ErrorBox>
     </ErrorPageInner>
   </ErrorPage>

@@ -5,6 +5,7 @@ import { getTextContentsFromHtmlString } from 'shared/utils/browser';
 import { TextEditor, TextEditedContent, Button } from 'shared/components';
 
 import { Title, EmptyLabel, Actions } from './Styles';
+import { TEXT } from 'config/text';
 
 const propTypes = {
   issue: PropTypes.object.isRequired,
@@ -24,27 +25,27 @@ const ProjectBoardIssueDetailsDescription = ({ issue, updateIssue }) => {
 
   return (
     <Fragment>
-      <Title>Description</Title>
+      <Title>{TEXT.issue.description}</Title>
       {isEditing ? (
         <Fragment>
           <TextEditor
-            placeholder="Describe the issue"
+            placeholder={TEXT.issue.descriptionPlaceholder}
             defaultValue={description}
             onChange={setDescription}
           />
           <Actions>
             <Button variant="primary" onClick={handleUpdate}>
-              Save
+              {TEXT.common.save}
             </Button>
             <Button variant="empty" onClick={() => setEditing(false)}>
-              Cancel
+              {TEXT.common.cancel}
             </Button>
           </Actions>
         </Fragment>
       ) : (
         <Fragment>
           {isDescriptionEmpty ? (
-            <EmptyLabel onClick={() => setEditing(true)}>Add a description...</EmptyLabel>
+            <EmptyLabel onClick={() => setEditing(true)}>{TEXT.issue.addDescription}</EmptyLabel>
           ) : (
             <TextEditedContent content={description} onClick={() => setEditing(true)} />
           )}

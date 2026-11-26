@@ -6,6 +6,7 @@ import { Select, IssuePriorityIcon } from 'shared/components';
 
 import { SectionTitle } from '../Styles';
 import { Priority, Label } from './Styles';
+import { TEXT } from 'config/text';
 
 const propTypes = {
   issue: PropTypes.object.isRequired,
@@ -14,7 +15,7 @@ const propTypes = {
 
 const ProjectBoardIssueDetailsPriority = ({ issue, updateIssue }) => (
   <Fragment>
-    <SectionTitle>Priority</SectionTitle>
+    <SectionTitle>{TEXT.issue.priority}</SectionTitle>
     <Select
       variant="empty"
       withClearValue={false}

@@ -5,6 +5,7 @@ import { KeyCodes } from 'shared/constants/keyCodes';
 import { isFocusedElementEditable } from 'shared/utils/browser';
 
 import { Tip, TipLetter } from './Styles';
+import { TEXT } from 'config/text';
 
 const propTypes = {
   setFormOpen: PropTypes.func.isRequired,
@@ -28,7 +29,10 @@ const ProjectBoardIssueDetailsCommentsCreateProTip = ({ setFormOpen }) => {
 
   return (
     <Tip>
-      <strong>Pro tip:</strong>press<TipLetter>M</TipLetter>to comment
+      <strong>{TEXT.issue.proTip}</strong>
+      {TEXT.issue.proTipPress}
+      <TipLetter>M</TipLetter>
+      {TEXT.issue.proTipAction}
     </Tip>
   );
 };

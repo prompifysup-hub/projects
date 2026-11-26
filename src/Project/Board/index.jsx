@@ -10,6 +10,7 @@ import Header from './Header';
 import Filters from './Filters';
 import Lists from './Lists';
 import IssueDetails from './IssueDetails';
+import { TEXT } from 'config/text';
 
 const propTypes = {
   project: PropTypes.object.isRequired,
@@ -36,7 +37,7 @@ const ProjectBoard = ({ project, fetchProject, updateLocalProjectIssues }) => {
 
   return (
     <Fragment>
-      <Breadcrumbs items={['Projects', project.name, 'Kanban Board']} />
+      <Breadcrumbs items={[TEXT.nav.breadcrumbRoot, project.name, TEXT.nav.board]} />
       <Header activeSprint={activeSprint} fetchProject={fetchProject} />
       <Filters
         projectUsers={project.users}

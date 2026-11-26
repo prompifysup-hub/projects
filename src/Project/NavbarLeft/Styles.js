@@ -2,6 +2,8 @@ import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 
 import { font, sizes, color, mixin, zIndexValues } from 'shared/utils/styles';
+
+const mix = (a, percent, b) => `color-mix(in srgb, ${a} ${percent}%, ${b})`;
 import { Logo } from 'shared/components';
 
 export const NavLeft = styled.aside`
@@ -49,11 +51,11 @@ export const Item = styled.div`
   height: 42px;
   line-height: 42px;
   padding-left: 64px;
-  color: #deebff;
+  color: ${mix(color.textOnPrimary, 85, color.backgroundDarkPrimary)};
   transition: color 0.1s;
   ${mixin.clickable}
   &:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: ${mix(color.textOnPrimary, 10, 'transparent')};
   }
   i {
     position: absolute;

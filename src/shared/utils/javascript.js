@@ -26,4 +26,4 @@ export const sortByNewest = (items, sortField) =>
 
 /** Short, readable issue key (ids are long uuids in Prompify), e.g. "TASK-3F0EF0". */
 export const issueKey = (type, id) =>
-  `${type}-${String(id).replace(/-/g, '').slice(-6).toUpperCase()}`;
+  `${String(type).toUpperCase()}-${String(id).replace(/-/g, '').slice(-6).toUpperCase()}`;

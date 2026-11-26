@@ -1,22 +1,23 @@
+import { TEXT } from 'config/text';
 export const is = {
   match: (testFn, message = '') => (value, fieldValues) => !testFn(value, fieldValues) && message,
 
-  required: () => value => isNilOrEmptyString(value) && 'This field is required',
+  required: () => value => isNilOrEmptyString(value) && TEXT.errors.required,
 
-  minLength: min => value => !!value && value.length < min && `Must be at least ${min} characters`,
+  minLength: min => value => !!value && value.length < min && TEXT.errors.minLength(min),
 
-  maxLength: max => value => !!value && value.length > max && `Must be at most ${max} characters`,
+  maxLength: max => value => !!value && value.length > max && TEXT.errors.maxLength(max),
 
   notEmptyArray: () => value =>
-    Array.isArray(value) && value.length === 0 && 'Please add at least one item',
+    Array.isArray(value) && value.length === 0 && TEXT.errors.atLeastOne,
 
-  email: () => value => !!value && !/.+@.+\..+/.test(value) && 'Must be a valid email',
+  email: () => value => !!value && !/.+@.+\..+/.test(value) && TEXT.errors.email,
 
   url: () => value =>
     !!value &&
     // eslint-disable-next-line no-useless-escape
     !/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/.test(value) &&
-    'Must be a valid URL',
+    TEXT.errors.url,
 };
 
 const isNilOrEmptyString = value => value === undefined || value === null || value === '';

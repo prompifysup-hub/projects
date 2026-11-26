@@ -11,6 +11,7 @@ import {
   StyledButton,
   ClearAll,
 } from './Styles';
+import { TEXT } from 'config/text';
 
 const propTypes = {
   projectUsers: PropTypes.array.isRequired,
@@ -47,17 +48,17 @@ const ProjectBoardFilters = ({ projectUsers, defaultFilters, filters, mergeFilte
         isActive={myOnly}
         onClick={() => mergeFilters({ myOnly: !myOnly })}
       >
-        Only My Issues
+        {TEXT.board.onlyMine}
       </StyledButton>
       <StyledButton
         variant="empty"
         isActive={recent}
         onClick={() => mergeFilters({ recent: !recent })}
       >
-        Recently Updated
+        {TEXT.board.recent}
       </StyledButton>
       {!areFiltersCleared && (
-        <ClearAll onClick={() => mergeFilters(defaultFilters)}>Clear all</ClearAll>
+        <ClearAll onClick={() => mergeFilters(defaultFilters)}>{TEXT.board.clearAll}</ClearAll>
       )}
     </Filters>
   );

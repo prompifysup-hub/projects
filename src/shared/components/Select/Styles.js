@@ -5,7 +5,7 @@ import Icon from 'shared/components/Icon';
 
 export const StyledSelect = styled.div`
   position: relative;
-  border-radius: 4px;
+  border-radius: var(--radius, 4px);
   cursor: pointer;
   ${font.size(14)}
   ${props => props.variant === 'empty' && `display: inline-block;`}
@@ -27,7 +27,7 @@ export const StyledSelect = styled.div`
       css`
         border: 1px solid ${color.borderInputFocus};
         box-shadow: 0 0 0 1px ${color.borderInputFocus};
-        background: #fff;
+        background: ${color.backgroundWhite};
       }
     `}
   }
@@ -49,8 +49,8 @@ export const ValueContainer = styled.div`
   ${props =>
     props.variant === 'normal' &&
     css`
-      min-height: 32px;
-      padding: 5px 5px 5px 10px;
+      min-height: calc(20px + 2 * var(--control-padding-y, 6px));
+      padding: 5px 5px 5px calc(var(--control-padding-x, 7px) + 3px);
     `}
 `;
 
@@ -94,8 +94,8 @@ export const Dropdown = styled.div`
   position: absolute;
   top: 100%;
   left: 0;
-  border-radius: 0 0 4px 4px;
-  background: #fff;
+  border-radius: 0 0 var(--radius, 4px) var(--radius, 4px);
+  background: ${color.backgroundWhite};
   ${mixin.boxShadowDropdown}
   ${props => (props.width ? `width: ${props.width}px;` : 'width: 100%;')}
 `;

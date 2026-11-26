@@ -2,6 +2,7 @@ import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { StyledConfirmModal, Title, Message, Actions, StyledButton } from './Styles';
+import { TEXT } from 'config/text';
 
 const propTypes = {
   className: PropTypes.string,
@@ -17,10 +18,10 @@ const propTypes = {
 const defaultProps = {
   className: undefined,
   variant: 'primary',
-  title: 'Warning',
-  message: 'Are you sure you want to continue with this action?',
-  confirmText: 'Confirm',
-  cancelText: 'Cancel',
+  title: TEXT.common.warning,
+  message: TEXT.common.areYouSure,
+  confirmText: TEXT.common.confirm,
+  cancelText: TEXT.common.cancel,
 };
 
 const ConfirmModal = ({

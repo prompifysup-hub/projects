@@ -52,10 +52,11 @@ export const LinkItem = styled.div`
   position: relative;
   display: flex;
   padding: 8px 12px;
-  border-radius: 3px;
+  border-radius: var(--radius, 3px);
   ${mixin.clickable}
-  ${props =>
-    !props.to ? `cursor: not-allowed;` : `&:hover { background: ${color.backgroundLight}; }`}
+  &:hover {
+    background: ${color.backgroundLight};
+  }
   i {
     margin-right: 15px;
     font-size: 20px;
@@ -72,23 +73,4 @@ export const LinkItem = styled.div`
 export const LinkText = styled.div`
   padding-top: 2px;
   ${font.size(14.7)};
-`;
-
-export const NotImplemented = styled.div`
-  display: inline-block;
-  position: absolute;
-  top: 7px;
-  left: 40px;
-  width: 140px;
-  padding: 5px 0 5px 8px;
-  border-radius: 3px;
-  text-transform: uppercase;
-  color: ${color.textDark};
-  background: ${color.backgroundMedium};
-  opacity: 0;
-  ${font.size(11.5)};
-  ${font.bold}
-  ${LinkItem}:hover & {
-    opacity: 1;
-  }
 `;

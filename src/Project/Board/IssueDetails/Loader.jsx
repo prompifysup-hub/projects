@@ -1,14 +1,20 @@
 import React from 'react';
 import ContentLoader from 'react-content-loader';
 
+// The placeholder is an SVG, which cannot read CSS variables in attributes: read the theme once.
+const themeColor = (name, fallback) => {
+  const channels = getComputedStyle(document.documentElement).getPropertyValue(`--${name}`).trim();
+  return channels ? `rgb(${channels.split(/\s+/).join(', ')})` : fallback;
+};
+
 const IssueDetailsLoader = () => (
   <div style={{ padding: 40 }}>
     <ContentLoader
       height={260}
       width={940}
       speed={2}
-      primaryColor="#f3f3f3"
-      secondaryColor="#ecebeb"
+      primaryColor={themeColor('muted', '#f3f3f3')}
+      secondaryColor={themeColor('hover', '#ecebeb')}
     >
       <rect x="0" y="0" rx="3" ry="3" width="627" height="24" />
       <rect x="0" y="29" rx="3" ry="3" width="506" height="24" />

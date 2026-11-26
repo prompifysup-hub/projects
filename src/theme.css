@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;700;800&display=swap');
+
+/*
+ * THEME — the whole look of the app: colours, typography, spacing, shapes and shadows. These are
+ * the look placeholders; Prompify rewrites this file from the user's colour palette and chosen style.
+ *
+ * Screens never use these directly: src/shared/utils/styles.js turns them into `color.*` values
+ * (and mixes the in-between shades), `font.*` and the radius / padding used by every Styles.js.
+ * Colours are space-separated "R G B" channels. Never write raw colours in a Styles.js file.
+ *
+ * Default: the original Jira-clone look (light). The .dark block is the same app on dark surfaces
+ * (used when "dark" is the class on <html>).
+ */
+:root {
+  /* Typography */
+  --font-sans: 'Figtree', system-ui, sans-serif;
+  --font-size-base: 16px; /* every text size scales with this: 15px = compact, 17px = spacious */
+  --heading-weight: 500; /* page titles and the issue title */
+  --letter-spacing: normal;
+
+  /* Spacing */
+  --card-padding: 10px; /* inside board cards */
+  --control-padding-x: 7px; /* inside inputs, dropdowns, text areas; buttons get 5px more */
+  --control-padding-y: 6px; /* controls are 20px + 2 x this tall (32px) */
+
+  /* Shapes */
+  --radius: 3px; /* cards, inputs, dialogs, dropdowns, board columns */
+  --radius-button: 3px;
+  --radius-badge: 4px; /* status and epic tags */
+}
+
+:root,
+.light {
+  color-scheme: light;
+
+  /* Neutrals (the "white / grays / black" of the app) */
+  --background: 255 255 255; /* page */
+  --foreground: 23 43 77; /* main text */
+  --card: 255 255 255; /* cards, dialogs, dropdowns, focused inputs */
+  --muted: 244 245 247; /* sidebar, board columns, inputs, secondary buttons */
+  --muted-foreground: 94 108 132; /* secondary text, icons */
+  --border: 223 225 230; /* lines and borders */
+  --input: 244 245 247;
+  --hover: 235 236 240;
+  --hover-foreground: 23 43 77;
+
+  /* Brand (the wizard's palette) */
+  --primary: 0 82 204; /* buttons, links, In progress, the left bar (darkened) */
+  --primary-foreground: 255 255 255;
+  --ring: 76 154 255; /* focus ring */
+  --accent: 0 82 204; /* the roadmap's Today marker */
+  --accent-foreground: 255 255 255;
+
+  /* Meaning (keep them recognisable: green = done, amber = warning, red = danger) */
+  --success: 11 135 91;
+  --warning: 248 156 28;
+  --destructive: 225 60 60;
+  --destructive-foreground: 255 255 255;
+
+  --shadow-card: 0 1px 2px 0 rgba(9, 30, 66, 0.25);
+  --shadow-lg: rgba(9, 30, 66, 0.25) 0 4px 8px -2px;
+}
+
+.dark {
+  color-scheme: dark;
+
+  --background: 17 24 39;
+  --foreground: 243 244 246;
+  --card: 31 41 55;
+  --muted: 55 65 81;
+  --muted-foreground: 156 163 175;
+  --border: 55 65 81;
+  --input: 55 65 81;
+  --hover: 55 65 81;
+  --hover-foreground: 243 244 246;
+
+  --primary: 76 154 255;
+  --primary-foreground: 255 255 255;
+  --ring: 76 154 255;
+  --accent: 76 154 255;
+  --accent-foreground: 255 255 255;
+
+  --success: 74 222 128;
+  --warning: 250 204 21;
+  --destructive: 239 68 68;
+  --destructive-foreground: 255 255 255;
+
+  --shadow-card: none;
+  --shadow-lg: rgb(0 0 0 / 0.3) 0 10px 15px -3px;
+}

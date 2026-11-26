@@ -19,14 +19,14 @@ export const SearchInputDebounced = styled(InputDebounced)`
     padding: 0 0 0 32px;
     border: none;
     border-bottom: 2px solid ${color.primary};
-    background: #fff;
+    background: ${color.backgroundWhite};
     ${font.size(21)}
     &:focus,
     &:hover {
       box-shadow: none;
       border: none;
       border-bottom: 2px solid ${color.primary};
-      background: #fff;
+      background: ${color.backgroundWhite};
     }
   }
 `;
@@ -48,7 +48,7 @@ export const Issue = styled.div`
   display: flex;
   align-items: center;
   padding: 4px 10px;
-  border-radius: 4px;
+  border-radius: var(--radius, 4px);
   transition: background 0.1s;
   ${mixin.clickable}
   &:hover {

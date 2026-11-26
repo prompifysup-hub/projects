@@ -12,12 +12,12 @@ export const TitleTextarea = styled(Textarea)`
     line-height: 1.28;
     border: none;
     resize: none;
-    background: #fff;
+    background: ${color.backgroundWhite};
     border: 1px solid transparent;
     box-shadow: 0 0 0 1px transparent;
     transition: background 0.1s;
     ${font.size(24)}
-    ${font.medium}
+    ${font.heading}
     &:hover:not(:focus) {
       background: ${color.backgroundLight};
     }

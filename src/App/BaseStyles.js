@@ -11,6 +11,8 @@ export default createGlobalStyle`
 
   body {
     color: ${color.textDarkest};
+    background: ${color.backgroundPage};
+    letter-spacing: var(--letter-spacing, normal);
     -webkit-tap-highlight-color: transparent;
     line-height: 1.2;
     ${font.size(16)}
@@ -60,7 +62,7 @@ export default createGlobalStyle`
   /* Workaround for IE11 focus highlighting for select elements */
   select::-ms-value {
     background: none;
-    color: #42413d;
+    color: ${color.textDarkest};
   }
 
   [role="button"], button, input, select, textarea {
@@ -77,7 +79,7 @@ export default createGlobalStyle`
   }
   select:-moz-focusring {
     color: transparent;
-    text-shadow: 0 0 0 #000;
+    text-shadow: 0 0 0 ${color.textDarkest};
   }
   select::-ms-expand {
     display: none;

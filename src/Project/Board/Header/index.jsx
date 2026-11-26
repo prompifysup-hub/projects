@@ -8,6 +8,8 @@ import { formatSprintDates } from 'shared/utils/sprints';
 import { Button, ConfirmModal } from 'shared/components';
 
 import { Header, BoardName, SprintInfo, SprintText } from './Styles';
+import { TEXT } from 'config/text';
+import { FEATURES } from 'config/app';
 
 const propTypes = {
   activeSprint: PropTypes.object,
@@ -26,7 +28,7 @@ const ProjectBoardHeader = ({ activeSprint, fetchProject }) => {
     try {
       await api.post(`/sprints/${activeSprint.id}/complete`);
       await fetchProject();
-      toast.success('Sprint completed. Unfinished issues moved to the backlog.');
+      toast.success(TEXT.sprint.completed);
       modal.close();
     } catch (error) {
       toast.error(error);
@@ -36,25 +38,27 @@ const ProjectBoardHeader = ({ activeSprint, fetchProject }) => {
 
   return (
     <Header>
-      <BoardName>{activeSprint ? activeSprint.name : 'Kanban board'}</BoardName>
+      <BoardName>{activeSprint ? activeSprint.name : TEXT.board.title}</BoardName>
       {activeSprint ? (
         <SprintInfo>
           <SprintText>
-            <strong>{activeSprint.goal || 'Active sprint'}</strong>
+            <strong>{activeSprint.goal || TEXT.board.activeSprint}</strong>
             {formatSprintDates(activeSprint)}
           </SprintText>
           <ConfirmModal
-            title={`Complete ${activeSprint.name}?`}
-            message="Done issues stay with this sprint. All other issues move back to the backlog."
-            confirmText="Complete sprint"
+            title={TEXT.sprint.completeTitle(activeSprint.name)}
+            message={TEXT.sprint.completeMessage}
+            confirmText={TEXT.sprint.complete}
             onConfirm={completeSprint}
-            renderLink={modal => <Button onClick={modal.open}>Complete sprint</Button>}
+            renderLink={modal => <Button onClick={modal.open}>{TEXT.sprint.complete}</Button>}
           />
         </SprintInfo>
       ) : (
-        <Link to={backlogUrl}>
-          <Button icon="issues">Plan a sprint</Button>
-        </Link>
+        FEATURES.sprints && (
+          <Link to={backlogUrl}>
+            <Button icon="issues">{TEXT.board.planSprint}</Button>
+          </Link>
+        )
       )}
     </Header>
   );

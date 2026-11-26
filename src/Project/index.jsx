@@ -15,6 +15,7 @@ import ProjectSettings from './ProjectSettings';
 import Backlog from './Backlog';
 import Roadmap from './Roadmap';
 import { ProjectPage } from './Styles';
+import { FEATURES } from 'config/app';
 
 const Project = () => {
   const match = useRouteMatch();
@@ -88,27 +89,31 @@ const Project = () => {
         )}
       />
 
-      <Route
-        path={`${match.path}/backlog`}
-        render={() => (
-          <Backlog
-            project={project}
-            fetchProject={fetchProject}
-            updateLocalProjectIssues={updateLocalProjectIssues}
-          />
-        )}
-      />
+      {FEATURES.sprints && (
+        <Route
+          path={`${match.path}/backlog`}
+          render={() => (
+            <Backlog
+              project={project}
+              fetchProject={fetchProject}
+              updateLocalProjectIssues={updateLocalProjectIssues}
+            />
+          )}
+        />
+      )}
 
-      <Route
-        path={`${match.path}/roadmap`}
-        render={() => (
-          <Roadmap
-            project={project}
-            fetchProject={fetchProject}
-            updateLocalProjectIssues={updateLocalProjectIssues}
-          />
-        )}
-      />
+      {FEATURES.roadmap && (
+        <Route
+          path={`${match.path}/roadmap`}
+          render={() => (
+            <Roadmap
+              project={project}
+              fetchProject={fetchProject}
+              updateLocalProjectIssues={updateLocalProjectIssues}
+            />
+          )}
+        />
+      )}
 
       <Route
         path={`${match.path}/settings`}

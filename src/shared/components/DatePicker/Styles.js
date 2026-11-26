@@ -12,8 +12,8 @@ export const Dropdown = styled.div`
   top: 130%;
   right: 0;
   width: 270px;
-  border-radius: 3px;
-  background: #fff;
+  border-radius: var(--radius, 3px);
+  background: ${color.backgroundWhite};
   ${mixin.boxShadowDropdown}
   ${props =>
     props.withTime &&
@@ -76,7 +76,7 @@ export const Day = styled.div`
   width: 14.28%;
   height: 30px;
   line-height: 30px;
-  border-radius: 3px;
+  border-radius: var(--radius, 3px);
   ${font.size(15)}
   ${props => !props.isFiller && hoverStyles}
   ${props => props.isToday && font.bold}
@@ -109,7 +109,7 @@ const hoverStyles = css`
 `;
 
 const selectedStyles = css`
-  color: #fff;
+  color: ${color.textOnPrimary};
   &:hover,
   & {
     background: ${color.primary};

@@ -1,7 +1,10 @@
 import moment from 'moment';
 
+import { FEATURES } from 'config/app';
+
 /** The sprint currently running, if any. */
-export const getActiveSprint = project => (project.sprints || []).find(s => s.status === 'active') || null;
+export const getActiveSprint = project =>
+  (FEATURES.sprints && (project.sprints || []).find(s => s.status === 'active')) || null;
 
 /** Sprints that are not completed: the active one first, then planned ones in order. */
 export const getOpenSprints = project =>
@@ -14,6 +17,7 @@ export const getOpenSprints = project =>
  * every issue that does not belong to a completed sprint.
  */
 export const getBoardIssues = project => {
+  if (!FEATURES.sprints) return project.issues;
   const active = getActiveSprint(project);
   if (active) return project.issues.filter(i => i.sprintId === active.id);
   const completed = new Set((project.sprints || []).filter(s => s.status === 'completed').map(s => s.id));

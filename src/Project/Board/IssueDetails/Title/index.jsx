@@ -5,6 +5,7 @@ import { KeyCodes } from 'shared/constants/keyCodes';
 import { is, generateErrors } from 'shared/utils/validation';
 
 import { TitleTextarea, ErrorText } from './Styles';
+import { TEXT } from 'config/text';
 
 const propTypes = {
   issue: PropTypes.object.isRequired,
@@ -34,7 +35,7 @@ const ProjectBoardIssueDetailsTitle = ({ issue, updateIssue }) => {
     <Fragment>
       <TitleTextarea
         minRows={1}
-        placeholder="Short summary"
+        placeholder={TEXT.issue.titlePlaceholder}
         defaultValue={issue.title}
         ref={$titleInputRef}
         onBlur={handleTitleChange}

@@ -15,6 +15,7 @@ import {
   ValueMultiItem,
   AddMore,
 } from './Styles';
+import { TEXT } from 'config/text';
 
 const propTypes = {
   className: PropTypes.string,
@@ -41,7 +42,7 @@ const defaultProps = {
   name: undefined,
   value: undefined,
   defaultValue: undefined,
-  placeholder: 'Select',
+  placeholder: TEXT.common.select,
   invalid: false,
   onCreate: undefined,
   isMulti: false,
@@ -171,7 +172,7 @@ const Select = ({
             )}
             <AddMore>
               <Icon type="plus" />
-              Add more
+              {TEXT.common.addMore}
             </AddMore>
           </ValueMulti>
         )}

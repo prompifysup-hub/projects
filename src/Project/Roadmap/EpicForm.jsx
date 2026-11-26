@@ -5,16 +5,9 @@ import { Form, ConfirmModal, Button } from 'shared/components';
 
 import { FormElement, FormHeading, DateRow, Actions, ActionButton } from 'Project/SprintForm/Styles';
 import { EpicSquare } from './Styles';
+import { TEXT } from 'config/text';
+import { EPIC_COLORS } from 'config/app';
 
-export const EPIC_COLORS = [
-  { value: '#4FADE6', label: 'Blue' },
-  { value: '#65BA43', label: 'Green' },
-  { value: '#F89C1C', label: 'Orange' },
-  { value: '#E44D42', label: 'Red' },
-  { value: '#8777D9', label: 'Purple' },
-  { value: '#00B8D9', label: 'Teal' },
-  { value: '#6B778C', label: 'Grey' },
-];
 
 const propTypes = {
   epic: PropTypes.object,
@@ -53,9 +46,9 @@ const EpicForm = ({ epic, onSubmit, onDelete, modalClose }) => (
     }}
     validate={values => {
       const errors = {};
-      if (!values.title || !values.title.trim()) errors.title = 'This field is required';
+      if (!values.title || !values.title.trim()) errors.title = TEXT.errors.required;
       if (values.startDate && values.endDate && values.endDate < values.startDate) {
-        errors.endDate = 'End date must be after the start date';
+        errors.endDate = TEXT.errors.endBeforeStart;
       }
       return errors;
     }}
@@ -70,28 +63,28 @@ const EpicForm = ({ epic, onSubmit, onDelete, modalClose }) => (
   >
     {({ isSubmitting }) => (
       <FormElement>
-        <FormHeading>{epic.id ? 'Edit epic' : 'Create epic'}</FormHeading>
-        <Form.Field.Input name="title" label="Epic name" tip="A larger piece of work, e.g. “New homepage”." />
+        <FormHeading>{epic.id ? TEXT.roadmap.editEpic : TEXT.roadmap.createEpic}</FormHeading>
+        <Form.Field.Input name="title" label={TEXT.epic.name} tip={TEXT.epic.nameTip} />
         <Form.Field.Select
           name="color"
-          label="Colour"
+          label={TEXT.epic.color}
           withClearValue={false}
           options={EPIC_COLORS}
           renderOption={renderColor}
           renderValue={renderColor}
         />
         <DateRow>
-          <Form.Field.DatePicker name="startDate" label="Start date" withTime={false} />
-          <Form.Field.DatePicker name="endDate" label="Due date" withTime={false} />
+          <Form.Field.DatePicker name="startDate" label={TEXT.epic.start} withTime={false} />
+          <Form.Field.DatePicker name="endDate" label={TEXT.epic.due} withTime={false} />
         </DateRow>
-        <Form.Field.Textarea name="description" label="Description" />
+        <Form.Field.Textarea name="description" label={TEXT.epic.description} />
         <Actions>
           {onDelete && (
             <ConfirmModal
               variant="danger"
-              title={`Delete “${epic.title}”?`}
-              message="Its issues are kept but no longer belong to an epic."
-              confirmText="Delete epic"
+              title={TEXT.epic.deleteTitle(epic.title)}
+              message={TEXT.epic.deleteMessage}
+              confirmText={TEXT.epic.deleteConfirm}
               onConfirm={async modal => {
                 await onDelete();
                 modal.close();
@@ -99,16 +92,16 @@ const EpicForm = ({ epic, onSubmit, onDelete, modalClose }) => (
               }}
               renderLink={modal => (
                 <Button type="button" variant="empty" icon="trash" onClick={modal.open} style={{ marginRight: 'auto' }}>
-                  Delete
+                  {TEXT.epic.delete}
                 </Button>
               )}
             />
           )}
           <ActionButton type="submit" variant="primary" isWorking={isSubmitting}>
-            {epic.id ? 'Save changes' : 'Create epic'}
+            {epic.id ? TEXT.epic.saveChanges : TEXT.roadmap.createEpic}
           </ActionButton>
           <ActionButton type="button" variant="empty" onClick={modalClose}>
-            Cancel
+            {TEXT.common.cancel}
           </ActionButton>
         </Actions>
       </FormElement>

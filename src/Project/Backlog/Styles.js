@@ -11,13 +11,13 @@ export const Header = styled.div`
 
 export const Title = styled.div`
   ${font.size(24)}
-  ${font.medium}
+  ${font.heading}
 `;
 
 export const Section = styled.div`
   margin-top: 24px;
   padding: 6px 6px 8px;
-  border-radius: 3px;
+  border-radius: var(--radius, 3px);
   background: ${color.backgroundLightest};
 `;
 
@@ -82,7 +82,7 @@ export const Goal = styled.div`
 
 export const Issues = styled.div`
   min-height: 44px;
-  border-radius: 3px;
+  border-radius: var(--radius, 3px);
   background: ${props => (props.isDraggingOver ? color.backgroundLightPrimary : 'transparent')};
   transition: background 0.1s;
 `;
@@ -94,7 +94,7 @@ export const Empty = styled.div`
   height: 44px;
   margin: 0 4px;
   border: 1px dashed ${color.borderLight};
-  border-radius: 3px;
+  border-radius: var(--radius, 3px);
   color: ${color.textMedium};
   ${font.size(13.5)}
 `;
@@ -104,12 +104,12 @@ export const Row = styled.div`
   align-items: center;
   height: 42px;
   padding: 0 12px;
-  background: #fff;
+  background: ${color.backgroundWhite};
   border-bottom: 1px solid ${color.borderLightest};
   ${mixin.clickable}
   &:first-child {
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
+    border-top-left-radius: var(--radius, 3px);
+    border-top-right-radius: var(--radius, 3px);
   }
   &:hover {
     background: ${color.backgroundLight};
@@ -117,7 +117,7 @@ export const Row = styled.div`
   ${props =>
     props.isDragging &&
     css`
-      border-radius: 3px;
+      border-radius: var(--radius, 3px);
       ${mixin.boxShadowMedium}
     `}
   & > * + * {
@@ -156,7 +156,7 @@ export const Assignees = styled.div`
   margin-left: 10px;
   & > * {
     margin-left: -4px;
-    box-shadow: 0 0 0 2px #fff;
+    box-shadow: 0 0 0 2px ${color.backgroundWhite};
   }
 `;
 
@@ -165,7 +165,7 @@ export const CreateLink = styled.div`
   align-items: center;
   margin-top: 6px;
   padding: 8px 8px;
-  border-radius: 3px;
+  border-radius: var(--radius, 3px);
   color: ${color.textMedium};
   ${font.size(14.5)}
   ${mixin.clickable}

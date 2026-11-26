@@ -45,6 +45,8 @@ import {
   CreateLink,
   CreateForm,
 } from './Styles';
+import { TEXT } from 'config/text';
+import { STATUS, DEFAULT_TYPE, DEFAULT_PRIORITY, SPRINT, FEATURES } from 'config/app';
 
 const propTypes = {
   project: PropTypes.object.isRequired,
@@ -102,18 +104,18 @@ const ProjectBacklog = ({ project, fetchProject, updateLocalProjectIssues }) => 
     const { mode, sprint } = sprintModal;
     if (mode === 'create') {
       await api.post('/sprints', values);
-      toast.success('Sprint created.');
+      toast.success(TEXT.sprint.created);
     } else if (mode === 'edit') {
       await api.put(`/sprints/${sprint.id}`, values);
-      toast.success('Sprint updated.');
+      toast.success(TEXT.sprint.updated);
     } else {
       await api.put(`/sprints/${sprint.id}`, {
         ...values,
         status: 'active',
         startDate: values.startDate || new Date().toISOString(),
-        endDate: values.endDate || new Date(Date.now() + 14 * 864e5).toISOString(),
+        endDate: values.endDate || new Date(Date.now() + SPRINT.defaultLengthDays * 864e5).toISOString(),
       });
-      toast.success(`${values.name} started. Its issues are now on the board.`);
+      toast.success(TEXT.sprint.started(values.name));
     }
     await fetchProject();
   };
@@ -140,59 +142,59 @@ const ProjectBacklog = ({ project, fetchProject, updateLocalProjectIssues }) => 
         <SectionHeader>
           <Toggle onClick={() => toggle(groupId)}>
             <Icon type={isCollapsed ? 'chevron-right' : 'chevron-down'} />
-            <SectionName>{sprint ? sprint.name : 'Backlog'}</SectionName>
+            <SectionName>{sprint ? sprint.name : TEXT.backlog.section}</SectionName>
             <SectionMeta>
               {sprint && formatSprintDates(sprint) ? `${formatSprintDates(sprint)} · ` : ''}
-              {issues.length} {issues.length === 1 ? 'issue' : 'issues'}
-              {isActive ? ' · Active' : ''}
+              {TEXT.backlog.issueCount(issues.length)}
+              {isActive ? TEXT.backlog.active : ''}
             </SectionMeta>
           </Toggle>
           <SectionActions>
-            {points > 0 && <Points title="Total estimate">{points}</Points>}
+            {points > 0 && <Points title={TEXT.backlog.totalEstimate}>{points}</Points>}
             {sprint && isActive && (
               <ConfirmModal
-                title={`Complete ${sprint.name}?`}
-                message="Done issues stay with this sprint. All other issues move back to the backlog."
-                confirmText="Complete sprint"
+                title={TEXT.sprint.completeTitle(sprint.name)}
+                message={TEXT.sprint.completeMessage}
+                confirmText={TEXT.sprint.complete}
                 onConfirm={modal =>
                   runSprintAction(
                     () => api.post(`/sprints/${sprint.id}/complete`),
-                    'Sprint completed. Unfinished issues moved to the backlog.',
+                    TEXT.sprint.completed,
                     modal,
                   )
                 }
-                renderLink={modal => <Button onClick={modal.open}>Complete sprint</Button>}
+                renderLink={modal => <Button onClick={modal.open}>{TEXT.sprint.complete}</Button>}
               />
             )}
             {sprint && !isActive && (
               <Button
                 variant="primary"
                 disabled={!!activeSprint}
-                title={activeSprint ? `Complete ${activeSprint.name} first` : undefined}
+                title={activeSprint ? TEXT.sprint.startBlocked(activeSprint.name) : undefined}
                 onClick={() => setSprintModal({ mode: 'start', sprint })}
               >
-                Start sprint
+                {TEXT.sprint.start}
               </Button>
             )}
             {sprint && (
               <Button
                 icon="settings"
                 variant="empty"
-                title="Edit sprint"
+                title={TEXT.sprint.edit}
                 onClick={() => setSprintModal({ mode: 'edit', sprint })}
               />
             )}
             {sprint && !isActive && (
               <ConfirmModal
                 variant="danger"
-                title={`Delete ${sprint.name}?`}
-                message="Its issues move back to the backlog."
-                confirmText="Delete sprint"
+                title={TEXT.sprint.deleteTitle(sprint.name)}
+                message={TEXT.sprint.deleteMessage}
+                confirmText={TEXT.sprint.delete}
                 onConfirm={modal =>
-                  runSprintAction(() => api.delete(`/sprints/${sprint.id}`), 'Sprint deleted.', modal)
+                  runSprintAction(() => api.delete(`/sprints/${sprint.id}`), TEXT.sprint.deleted, modal)
                 }
                 renderLink={modal => (
-                  <Button icon="trash" variant="empty" title="Delete sprint" onClick={modal.open} />
+                  <Button icon="trash" variant="empty" title={TEXT.sprint.delete} onClick={modal.open} />
                 )}
               />
             )}
@@ -210,7 +212,7 @@ const ProjectBacklog = ({ project, fetchProject, updateLocalProjectIssues }) => 
                   isDraggingOver={snapshot.isDraggingOver}
                 >
                   {issues.length === 0 && !snapshot.isDraggingOver && (
-                    <Empty>{sprint ? 'Plan this sprint by dragging issues here' : 'Your backlog is empty'}</Empty>
+                    <Empty>{sprint ? TEXT.backlog.emptySprint : TEXT.backlog.emptyBacklog}</Empty>
                   )}
                   {issues.map((issue, index) => (
                     <IssueRow
@@ -234,11 +236,11 @@ const ProjectBacklog = ({ project, fetchProject, updateLocalProjectIssues }) => 
 
   return (
     <Fragment>
-      <Breadcrumbs items={['Projects', project.name, 'Backlog']} />
+      <Breadcrumbs items={[TEXT.nav.breadcrumbRoot, project.name, TEXT.backlog.title]} />
       <Header>
-        <Title>Backlog</Title>
+        <Title>{TEXT.backlog.title}</Title>
         <Button icon="plus" onClick={() => setSprintModal({ mode: 'create', sprint: {} })}>
-          Create sprint
+          {TEXT.sprint.create}
         </Button>
       </Header>
 
@@ -256,11 +258,11 @@ const ProjectBacklog = ({ project, fetchProject, updateLocalProjectIssues }) => 
           onClose={() => setSprintModal(null)}
           renderContent={modal => (
             <SprintForm
-              title={{ create: 'Create sprint', edit: 'Edit sprint', start: 'Start sprint' }[sprintModal.mode]}
-              submitText={{ create: 'Create sprint', edit: 'Save changes', start: 'Start sprint' }[sprintModal.mode]}
+              title={{ create: TEXT.sprint.create, edit: TEXT.sprint.edit, start: TEXT.sprint.start }[sprintModal.mode]}
+              submitText={{ create: TEXT.sprint.create, edit: TEXT.sprint.saveChanges, start: TEXT.sprint.start }[sprintModal.mode]}
               sprint={
                 sprintModal.mode === 'create'
-                  ? { name: `Sprint ${(project.sprints || []).length + 1}` }
+                  ? { name: TEXT.sprint.defaultName((project.sprints || []).length + 1) }
                   : sprintModal.sprint
               }
               onSubmit={saveSprint}
@@ -298,8 +300,8 @@ const IssueRow = ({ issue, index, project, onOpen }) => {
         >
           <IssueTypeIcon type={issue.type} />
           <IssuePriorityIcon priority={issue.priority} />
-          <RowTitle isDone={issue.status === 'done'}>{issue.title}</RowTitle>
-          {epic && (
+          <RowTitle isDone={issue.status === STATUS.done}>{issue.title}</RowTitle>
+          {FEATURES.roadmap && epic && (
             <EpicTag color={epic.color}>
               <span>{epic.title}</span>
             </EpicTag>
@@ -310,7 +312,7 @@ const IssueRow = ({ issue, index, project, onOpen }) => {
           >
             {IssueStatusCopy[issue.status]}
           </StatusTag>
-          {issue.estimate ? <Points title="Estimate">{issue.estimate}</Points> : null}
+          {issue.estimate ? <Points title={TEXT.backlog.estimate}>{issue.estimate}</Points> : null}
           <Assignees>
             {assignees.map(user => (
               <Avatar key={user.id} size={24} avatarUrl={user.avatarUrl} name={user.name} />
@@ -343,9 +345,9 @@ const InlineCreate = ({ sprintId, fetchProject }) => {
     try {
       await api.post('/issues', {
         title: title.trim(),
-        type: 'task',
-        status: 'backlog',
-        priority: '3',
+        type: DEFAULT_TYPE,
+        status: STATUS.initial,
+        priority: DEFAULT_PRIORITY,
         reporterId: currentUserId,
         userIds: [],
         sprintId,
@@ -362,7 +364,7 @@ const InlineCreate = ({ sprintId, fetchProject }) => {
     return (
       <CreateLink onClick={() => setOpen(true)}>
         <Icon type="plus" size={18} />
-        Create issue
+        {TEXT.backlog.createIssue}
       </CreateLink>
     );
   }
@@ -373,7 +375,7 @@ const InlineCreate = ({ sprintId, fetchProject }) => {
         autoFocus
         value={title}
         disabled={isSaving}
-        placeholder="What needs to be done? Press Enter to create, Esc to cancel"
+        placeholder={TEXT.backlog.createPlaceholder}
         onChange={setTitle}
         onKeyDown={event => event.key === 'Escape' && setOpen(false)}
         onBlur={() => !title.trim() && setOpen(false)}

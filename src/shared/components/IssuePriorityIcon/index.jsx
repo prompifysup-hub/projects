@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { IssuePriority } from 'shared/constants/issues';
+import { PRIORITIES } from 'config/app';
 
 import { PriorityIcon } from './Styles';
 
@@ -10,9 +10,7 @@ const propTypes = {
 };
 
 const IssuePriorityIcon = ({ priority, ...otherProps }) => {
-  const iconType = [IssuePriority.LOW, IssuePriority.LOWEST].includes(priority)
-    ? 'arrow-down'
-    : 'arrow-up';
+  const iconType = (PRIORITIES.find(p => p.value === priority) || {}).icon || 'arrow-up';
 
   return <PriorityIcon type={iconType} color={priority} size={18} {...otherProps} />;
 };

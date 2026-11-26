@@ -14,5 +14,7 @@ inline issue creation), Roadmap page (epics on a timeline, drag/resize bars, zoo
 Epic fields in the issue panel and the create form, board shows the active sprint with a
 "Complete sprint" button.
 
-Removed: the "not implemented" sidebar links, the author's About / feedback panels and the
-GitHub button.
+Removed: the "not implemented" sidebar links, the author's About / feedback panels, the
+GitHub button, the guest sign-in screen, the Jira logo / artwork / favicon and the commercial
+Circular fonts (text uses the theme font, default Figtree). Added later: a Team section in Project
+settings (add / edit / remove members).

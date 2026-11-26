@@ -8,6 +8,8 @@
  */
 import { isConnected, db } from './prompify';
 import createDemoData from './demoData';
+import { TEXT } from 'config/text';
+import { STATUS, DEFAULT_TYPE, DEFAULT_PRIORITY, CATEGORIES, EPIC_COLORS } from 'config/app';
 
 /* ---------- table <-> app field mapping ---------- */
 
@@ -92,11 +94,11 @@ async function loadFromPrompify() {
 
   let projectRow = projectRows.sort(byCreated)[0];
   if (!projectRow) {
-    projectRow = await db.create('project', { name: 'My project', category: 'software' });
+    projectRow = await db.create('project', { name: TEXT.data.defaultProject, category: CATEGORIES[0].value });
   }
   let sortedUsers = userRows.sort(byCreated);
   if (sortedUsers.length === 0) {
-    sortedUsers = [await db.create('users', { name: 'You', email: 'you@example.com' })];
+    sortedUsers = [await db.create('users', { name: TEXT.data.defaultUser, email: 'you@example.com' })];
   }
 
   const users = sortedUsers.map(row => fromRow('users', row));
@@ -129,9 +131,9 @@ async function loadFromPrompify() {
     const merged = { ...issue, ...fix };
     return {
       ...merged,
-      type: merged.type || 'task',
-      status: merged.status || 'backlog',
-      priority: String(merged.priority || '3'),
+      type: merged.type || DEFAULT_TYPE,
+      status: merged.status || STATUS.initial,
+      priority: String(merged.priority || DEFAULT_PRIORITY),
       reporterId: merged.reporterId || users[0].id,
       listPosition: merged.listPosition ?? index + 1,
       backlogPosition: merged.backlogPosition ?? merged.listPosition ?? index + 1,
@@ -210,7 +212,7 @@ const fullIssue = (s, issue) => ({
   users: issue.userIds.map(id => s.users.find(u => u.id === id)).filter(Boolean),
   comments: s.comments
     .filter(c => c.issueId === issue.id)
-    .map(c => ({ ...c, user: s.users.find(u => u.id === c.userId) || { name: 'Unknown', avatarUrl: '' } })),
+    .map(c => ({ ...c, user: s.users.find(u => u.id === c.userId) || { name: TEXT.team.formerMember, avatarUrl: '' } })),
 });
 
 const issueValues = body => {
@@ -223,9 +225,29 @@ const issueValues = body => {
 /* ---------- routes ---------- */
 
 const routes = [
-  ['post', '/authentication/guest', async () => ({ authToken: 'prompify' })],
-
   ['get', '/currentUser', async () => ({ currentUser: (await getStore()).users[0] })],
+
+  // Team members. The first user is the signed-in user and cannot be removed.
+  ['post', '/users', async (_p, body) => ({ user: await insert('users', 'users', { avatarUrl: '', ...body }) })],
+  ['put', '/users/:id', async ({ id }, body) => ({ user: await patch('users', 'users', id, body) })],
+  ['delete', '/users/:id', async ({ id }) => {
+    const s = await getStore();
+    const me = s.users[0];
+    if (me && me.id === id) {
+      throw { code: 'BAD_REQUEST', message: TEXT.team.cannotRemoveYourself, status: 400, data: {} };
+    }
+    // Unassign them and hand their reported issues to the signed-in user; their comments stay.
+    const touched = s.issues.filter(i => i.userIds.includes(id) || i.reporterId === id);
+    await Promise.all(
+      touched.map(i =>
+        patch('issues', 'issues', i.id, {
+          userIds: i.userIds.filter(u => u !== id),
+          reporterId: i.reporterId === id ? me.id : i.reporterId,
+        }),
+      ),
+    );
+    return { user: await destroy('users', 'users', id) };
+  }],
 
   ['get', '/project', async () => {
     const s = await getStore();
@@ -261,9 +283,9 @@ const routes = [
     const sameStatus = s.issues.filter(i => i.status === values.status).map(i => i.listPosition);
     const sameGroup = s.issues.filter(i => (i.sprintId || null) === (values.sprintId || null)).map(i => i.backlogPosition || 0);
     const issue = await insert('issues', 'issues', {
-      type: 'task',
-      status: 'backlog',
-      priority: '3',
+      type: DEFAULT_TYPE,
+      status: STATUS.initial,
+      priority: DEFAULT_PRIORITY,
       userIds: [],
       sprintId: null,
       epicId: null,
@@ -288,7 +310,7 @@ const routes = [
     const s = await getStore();
     const position = Math.max(0, ...s.sprints.map(sp => sp.position || 0)) + 1;
     const sprint = await insert('sprints', 'sprints', {
-      name: `Sprint ${position}`,
+      name: TEXT.sprint.defaultName(position),
       goal: '',
       status: 'planned',
       startDate: null,
@@ -302,7 +324,7 @@ const routes = [
   ['post', '/sprints/:id/complete', async ({ id }) => {
     const s = await getStore();
     // Unfinished issues go back to the backlog; done issues stay with the completed sprint.
-    const unfinished = s.issues.filter(i => i.sprintId === id && i.status !== 'done');
+    const unfinished = s.issues.filter(i => i.sprintId === id && i.status !== STATUS.done);
     await Promise.all(unfinished.map(i => patch('issues', 'issues', i.id, { sprintId: null })));
     return { sprint: await patch('sprints', 'sprints', id, { status: 'completed', endDate: now() }) };
   }],
@@ -312,7 +334,7 @@ const routes = [
     return { sprint: await destroy('sprints', 'sprints', id) };
   }],
 
-  ['post', '/epics', async (_p, body) => ({ epic: await insert('epics', 'epics', { color: '#4FADE6', description: '', ...body }) })],
+  ['post', '/epics', async (_p, body) => ({ epic: await insert('epics', 'epics', { color: EPIC_COLORS[0].value, description: '', ...body }) })],
   ['put', '/epics/:id', async ({ id }, body) => ({ epic: await patch('epics', 'epics', id, body) })],
   ['delete', '/epics/:id', async ({ id }) => {
     const s = await getStore();

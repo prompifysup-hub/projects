@@ -1,9 +1,8 @@
 import styled from 'styled-components';
 
 import { color, font, mixin } from 'shared/utils/styles';
-import { Icon } from 'shared/components';
-
-import imageBackground from './assets/background-forest.jpg';
+import Icon from 'shared/components/Icon';
+import Button from 'shared/components/Button';
 
 export const ErrorPage = styled.div`
   padding: 64px;
@@ -12,11 +11,7 @@ export const ErrorPage = styled.div`
 export const ErrorPageInner = styled.div`
   margin: 0 auto;
   max-width: 1440px;
-  padding: 200px 0;
-  ${mixin.backgroundImage(imageBackground)}
-  @media (max-height: 680px) {
-    padding: 140px 0;
-  }
+  padding: 120px 0;
 `;
 
 export const ErrorBox = styled.div`
@@ -24,10 +19,14 @@ export const ErrorBox = styled.div`
   margin: 0 auto;
   max-width: 480px;
   padding: 32px;
-  border-radius: 3px;
+  border-radius: var(--radius, 3px);
   border: 1px solid ${color.borderLight};
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
-  background: rgba(255, 255, 255, 0.9);
+  ${mixin.boxShadowMedium}
+  background: ${color.backgroundWhite};
+`;
+
+export const ReloadButton = styled(Button)`
+  margin-top: 24px;
 `;
 
 export const StyledIcon = styled(Icon)`

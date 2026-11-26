@@ -8,7 +8,7 @@ export const List = styled.div`
   margin: 0 5px;
   min-height: 400px;
   width: 25%;
-  border-radius: 3px;
+  border-radius: var(--radius, 3px);
   background: ${color.backgroundLightest};
 `;
 

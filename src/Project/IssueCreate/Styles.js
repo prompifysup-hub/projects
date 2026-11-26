@@ -43,6 +43,6 @@ export const EpicDot = styled.span`
   width: 10px;
   height: 10px;
   margin-right: 8px;
-  border-radius: 3px;
+  border-radius: var(--radius, 3px);
   background: ${props => props.color};
 `;

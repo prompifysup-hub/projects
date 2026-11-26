@@ -5,6 +5,7 @@ import { Avatar, Select, Icon } from 'shared/components';
 
 import { SectionTitle } from '../Styles';
 import { User, Username } from './Styles';
+import { TEXT } from 'config/text';
 
 const propTypes = {
   issue: PropTypes.object.isRequired,
@@ -19,12 +20,12 @@ const ProjectBoardIssueDetailsAssigneesReporter = ({ issue, updateIssue, project
 
   return (
     <Fragment>
-      <SectionTitle>Assignees</SectionTitle>
+      <SectionTitle>{TEXT.issue.assignees}</SectionTitle>
       <Select
         isMulti
         variant="empty"
         dropdownWidth={343}
-        placeholder="Unassigned"
+        placeholder={TEXT.issue.unassigned}
         name="assignees"
         value={issue.userIds}
         options={userOptions}
@@ -37,7 +38,7 @@ const ProjectBoardIssueDetailsAssigneesReporter = ({ issue, updateIssue, project
         renderOption={({ value: userId }) => renderUser(getUserById(userId), false)}
       />
 
-      <SectionTitle>Reporter</SectionTitle>
+      <SectionTitle>{TEXT.issue.reporter}</SectionTitle>
       <Select
         variant="empty"
         dropdownWidth={343}

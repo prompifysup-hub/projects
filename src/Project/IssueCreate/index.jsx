@@ -24,6 +24,8 @@ import {
   ActionButton,
   EpicDot,
 } from './Styles';
+import { TEXT } from 'config/text';
+import { STATUS, DEFAULT_TYPE, DEFAULT_PRIORITY, FEATURES } from 'config/app';
 
 const propTypes = {
   project: PropTypes.object.isRequired,
@@ -41,12 +43,12 @@ const ProjectIssueCreate = ({ project, fetchProject, onCreate, modalClose }) => 
     <Form
       enableReinitialize
       initialValues={{
-        type: IssueType.TASK,
+        type: DEFAULT_TYPE,
         title: '',
         description: '',
         reporterId: currentUserId,
         userIds: [],
-        priority: IssuePriority.MEDIUM,
+        priority: DEFAULT_PRIORITY,
         sprintId: (getActiveSprint(project) || {}).id || NONE,
         epicId: NONE,
       }}
@@ -62,12 +64,12 @@ const ProjectIssueCreate = ({ project, fetchProject, onCreate, modalClose }) => 
             ...values,
             sprintId: values.sprintId === NONE ? null : values.sprintId,
             epicId: values.epicId === NONE ? null : values.epicId,
-            status: IssueStatus.BACKLOG,
+            status: STATUS.initial,
             projectId: project.id,
             users: values.userIds.map(id => ({ id })),
           });
           await fetchProject();
-          toast.success('Issue has been successfully created.');
+          toast.success(TEXT.create.created);
           onCreate();
         } catch (error) {
           Form.handleAPIError(error, form);
@@ -75,29 +77,25 @@ const ProjectIssueCreate = ({ project, fetchProject, onCreate, modalClose }) => 
       }}
     >
       <FormElement>
-        <FormHeading>Create issue</FormHeading>
+        <FormHeading>{TEXT.create.title}</FormHeading>
         <Form.Field.Select
           name="type"
-          label="Issue Type"
-          tip="Start typing to get a list of possible matches."
+          label={TEXT.create.type}
+          tip={TEXT.create.typeTip}
           options={typeOptions}
           renderOption={renderType}
           renderValue={renderType}
         />
         <Divider />
-        <Form.Field.Input
-          name="title"
-          label="Short Summary"
-          tip="Concisely summarize the issue in one or two sentences."
-        />
+        <Form.Field.Input name="title" label={TEXT.create.summary} tip={TEXT.create.summaryTip} />
         <Form.Field.TextEditor
           name="description"
-          label="Description"
-          tip="Describe the issue in as much detail as you'd like."
+          label={TEXT.create.description}
+          tip={TEXT.create.descriptionTip}
         />
         <Form.Field.Select
           name="reporterId"
-          label="Reporter"
+          label={TEXT.create.reporter}
           options={userOptions(project)}
           renderOption={renderUser(project)}
           renderValue={renderUser(project)}
@@ -105,41 +103,45 @@ const ProjectIssueCreate = ({ project, fetchProject, onCreate, modalClose }) => 
         <Form.Field.Select
           isMulti
           name="userIds"
-          label="Assignees"
-          tio="People who are responsible for dealing with this issue."
+          label={TEXT.create.assignees}
+          tip={TEXT.create.assigneesTip}
           options={userOptions(project)}
           renderOption={renderUser(project)}
           renderValue={renderUser(project)}
         />
         <Form.Field.Select
           name="priority"
-          label="Priority"
-          tip="Priority in relation to other issues."
+          label={TEXT.create.priority}
+          tip={TEXT.create.priorityTip}
           options={priorityOptions}
           renderOption={renderPriority}
           renderValue={renderPriority}
         />
-        <Form.Field.Select
-          name="sprintId"
-          label="Sprint"
-          tip="Issues in the active sprint appear on the board; the rest wait in the backlog."
-          options={sprintOptions(project)}
-          renderOption={renderPlain(sprintOptions(project))}
-          renderValue={renderPlain(sprintOptions(project))}
-        />
-        <Form.Field.Select
-          name="epicId"
-          label="Epic"
-          options={epicOptions(project)}
-          renderOption={renderEpic(project)}
-          renderValue={renderEpic(project)}
-        />
+        {FEATURES.sprints && (
+          <Form.Field.Select
+            name="sprintId"
+            label={TEXT.create.sprint}
+            tip={TEXT.create.sprintTip}
+            options={sprintOptions(project)}
+            renderOption={renderPlain(sprintOptions(project))}
+            renderValue={renderPlain(sprintOptions(project))}
+          />
+        )}
+        {FEATURES.roadmap && (
+          <Form.Field.Select
+            name="epicId"
+            label={TEXT.create.epic}
+            options={epicOptions(project)}
+            renderOption={renderEpic(project)}
+            renderValue={renderEpic(project)}
+          />
+        )}
         <Actions>
           <ActionButton type="submit" variant="primary" isWorking={isCreating}>
-            Create Issue
+            {TEXT.create.submit}
           </ActionButton>
           <ActionButton type="button" variant="empty" onClick={modalClose}>
-            Cancel
+            {TEXT.common.cancel}
           </ActionButton>
         </Actions>
       </FormElement>
@@ -150,34 +152,41 @@ const ProjectIssueCreate = ({ project, fetchProject, onCreate, modalClose }) => 
 const NONE = 'none';
 
 const sprintOptions = project => [
-  { value: NONE, label: 'Backlog (no sprint)' },
+  { value: NONE, label: TEXT.issue.noSprint },
   ...(project.sprints || [])
     .filter(sprint => sprint.status !== 'completed')
     .map(sprint => ({ value: sprint.id, label: sprint.name })),
 ];
 
 const epicOptions = project => [
-  { value: NONE, label: 'No epic' },
+  { value: NONE, label: TEXT.issue.noEpic },
   ...(project.epics || []).map(epic => ({ value: epic.id, label: epic.title })),
 ];
 
 // The Select passes only { value } when rendering the current value, so look the label up.
-const renderPlain = options => ({ value }) => (
-  <SelectItem>
-    <SelectItemLabel>{(options.find(option => option.value === value) || {}).label}</SelectItemLabel>
-  </SelectItem>
-);
+const renderPlain =
+  options =>
+  ({ value }) =>
+    (
+      <SelectItem>
+        <SelectItemLabel>
+          {(options.find(option => option.value === value) || {}).label}
+        </SelectItemLabel>
+      </SelectItem>
+    );
 
-const renderEpic = project => ({ value }) => {
-  const epic = (project.epics || []).find(({ id }) => id === value);
-  const label = epic ? epic.title : 'No epic';
-  return (
-    <SelectItem>
-      {epic && <EpicDot color={epic.color} />}
-      <SelectItemLabel>{label}</SelectItemLabel>
-    </SelectItem>
-  );
-};
+const renderEpic =
+  project =>
+  ({ value }) => {
+    const epic = (project.epics || []).find(({ id }) => id === value);
+    const label = epic ? epic.title : TEXT.issue.noEpic;
+    return (
+      <SelectItem>
+        {epic && <EpicDot color={epic.color} />}
+        <SelectItemLabel>{label}</SelectItemLabel>
+      </SelectItem>
+    );
+  };
 
 const typeOptions = Object.values(IssueType).map(type => ({
   value: type,
@@ -205,21 +214,23 @@ const renderPriority = ({ value: priority }) => (
   </SelectItem>
 );
 
-const renderUser = project => ({ value: userId, removeOptionValue }) => {
-  const user = project.users.find(({ id }) => id === userId);
+const renderUser =
+  project =>
+  ({ value: userId, removeOptionValue }) => {
+    const user = project.users.find(({ id }) => id === userId);
 
-  return (
-    <SelectItem
-      key={user.id}
-      withBottomMargin={!!removeOptionValue}
-      onClick={() => removeOptionValue && removeOptionValue()}
-    >
-      <Avatar size={20} avatarUrl={user.avatarUrl} name={user.name} />
-      <SelectItemLabel>{user.name}</SelectItemLabel>
-      {removeOptionValue && <Icon type="close" top={2} />}
-    </SelectItem>
-  );
-};
+    return (
+      <SelectItem
+        key={user.id}
+        withBottomMargin={!!removeOptionValue}
+        onClick={() => removeOptionValue && removeOptionValue()}
+      >
+        <Avatar size={20} avatarUrl={user.avatarUrl} name={user.name} />
+        <SelectItemLabel>{user.name}</SelectItemLabel>
+        {removeOptionValue && <Icon type="close" top={2} />}
+      </SelectItem>
+    );
+  };
 
 ProjectIssueCreate.propTypes = propTypes;
 

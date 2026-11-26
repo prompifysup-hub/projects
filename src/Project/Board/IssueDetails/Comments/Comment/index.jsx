@@ -17,6 +17,7 @@ import {
   EditLink,
   DeleteLink,
 } from './Styles';
+import { TEXT } from 'config/text';
 
 const propTypes = {
   comment: PropTypes.object.isRequired,
@@ -67,13 +68,13 @@ const ProjectBoardIssueDetailsComment = ({ comment, fetchIssue }) => {
         ) : (
           <Fragment>
             <Body>{comment.body}</Body>
-            <EditLink onClick={() => setFormOpen(true)}>Edit</EditLink>
+            <EditLink onClick={() => setFormOpen(true)}>{TEXT.common.edit}</EditLink>
             <ConfirmModal
-              title="Are you sure you want to delete this comment?"
-              message="Once you delete, it's gone for good."
-              confirmText="Delete comment"
+              title={TEXT.issue.commentDeleteTitle}
+              message={TEXT.issue.deleteMessage}
+              confirmText={TEXT.issue.commentDeleteConfirm}
               onConfirm={handleCommentDelete}
-              renderLink={modal => <DeleteLink onClick={modal.open}>Delete</DeleteLink>}
+              renderLink={modal => <DeleteLink onClick={modal.open}>{TEXT.common.delete}</DeleteLink>}
             />
           </Fragment>
         )}
