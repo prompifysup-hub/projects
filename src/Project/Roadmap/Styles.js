@@ -233,7 +233,7 @@ export const TodayLine = styled.div`
   top: 0;
   bottom: 0;
   width: 2px;
-  background: ${color.accent};
+  background: ${color.accentStrong};
   z-index: 2;
   &:before {
     content: '${TEXT.roadmap.today}';

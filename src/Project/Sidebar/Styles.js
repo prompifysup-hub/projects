@@ -62,10 +62,10 @@ export const LinkItem = styled.div`
     font-size: 20px;
   }
   &.active {
-    color: ${color.primary};
-    background: ${color.backgroundLight};
+    color: ${color.textOnAccent};
+    background: ${color.accent};
     i {
-      color: ${color.primary};
+      color: ${color.textOnAccent};
     }
   }
 `;

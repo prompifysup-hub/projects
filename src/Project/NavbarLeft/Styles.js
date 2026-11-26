@@ -14,7 +14,7 @@ export const NavLeft = styled.aside`
   overflow-x: hidden;
   height: 100vh;
   width: ${sizes.appNavBarLeftWidth}px;
-  background: ${color.backgroundDarkPrimary};
+  background: ${color.brandSecondary};
   transition: all 0.1s;
   ${mixin.hardwareAccelerate}
   &:hover {
@@ -51,11 +51,11 @@ export const Item = styled.div`
   height: 42px;
   line-height: 42px;
   padding-left: 64px;
-  color: ${mix(color.textOnPrimary, 85, color.backgroundDarkPrimary)};
+  color: ${mix(color.textOnSecondary, 85, color.brandSecondary)};
   transition: color 0.1s;
   ${mixin.clickable}
   &:hover {
-    background: ${mix(color.textOnPrimary, 10, 'transparent')};
+    background: ${mix(color.textOnSecondary, 10, 'transparent')};
   }
   i {
     position: absolute;

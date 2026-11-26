@@ -8,9 +8,9 @@ How the palette was mapped (for reference):
 
 | Wizard colour | Theme variables | Where it shows in this app |
 |---|---|---|
-| Primary | `--primary` (+ `--primary-foreground`, `--ring`) | The left bar (primary darkened), primary buttons (Create Issue, Save, Start sprint, Create epic), links, the active sidebar link, "In progress" tags, the project tile, the selected day in date pickers, focus rings, active filter buttons |
-| Secondary | tints `--background`, `--card`, `--muted`, `--hover`, `--input`, `--border` | Page, sidebar, board columns, cards, dialogs, dropdowns, inputs, hover states, borders |
-| Accent | `--accent` (+ `--accent-foreground`) | The roadmap's "Today" line and label; available as `color.accent` for highlights you add |
+| Primary | `--primary` (+ `--primary-foreground`, `--ring`) | The main actions only: primary buttons (Create Issue, Save, Start sprint, Create epic), links, "In progress" tags, the selected day in date pickers, focus rings, active filter buttons |
+| Secondary | `--secondary` (+ `--secondary-foreground`) = `color.brandSecondary` / `color.textOnSecondary`; also lightly tints `--background`, `--card`, `--muted`, `--hover`, `--input`, `--border` | The left bar (filled with the colour); page, sidebar, columns and cards carry a light tint |
+| Accent | `--accent` (+ `--accent-foreground`) = `color.accent` / `color.textOnAccent` for fills; `--accent-strong` = `color.accentStrong` for text / lines | The active sidebar link, the project tile, the roadmap's "Today" label (fill) and line (`accentStrong`) |
 | (from the style) | `--foreground`, `--muted-foreground` | Main and secondary text (in-between shades are mixed from these) |
 | (fixed meaning) | `--success`, `--warning`, `--destructive` | "Done" tags and success toasts, warning-tone statuses, Delete buttons, errors and error toasts |
 
@@ -22,6 +22,9 @@ tags), `${color.textDarkest}` / `textDark` / `textMedium` / `textLight`, `${colo
 `mixin.darken(color.primary, 0.1)` (both work with theme colours).
 
 Rules:
+- Balance the three colours: primary for the main action of each screen, `color.brandSecondary`
+  for structural bands (the left bar, section headers you add), `color.accent` for selected /
+  active states, highlights and counts. Do not make everything primary.
 - Never write raw colours (`#fff`, `white`, `rgba(…)`, `#0052cc`) in a Styles.js file or a
   component; use `color.*`. Text on a filled colour uses its pair: `color.primary` →
   `color.textOnPrimary`, `color.danger` → `color.textOnDanger`, `color.success` → `color.textOnSuccess`.

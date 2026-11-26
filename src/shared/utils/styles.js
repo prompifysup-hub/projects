@@ -17,7 +17,9 @@ export const color = {
   danger: v('destructive'),
   warning: v('warning'),
   secondary: v('muted'), // secondary buttons
-  accent: v('accent'), // the roadmap's Today marker
+  brandSecondary: v('secondary'), // the left bar (the brand's second colour)
+  accent: v('accent'), // active sidebar link, project tile, Today label (fills)
+  accentStrong: v('accent-strong'), // accent as text, icons or lines on cards
 
   textDarkest: v('foreground'),
   textDark: mix(v('foreground'), 75, v('muted-foreground')),
@@ -26,12 +28,12 @@ export const color = {
   textLink: v('primary'),
   textOnPrimary: v('primary-foreground'),
   textOnAccent: v('accent-foreground'),
+  textOnSecondary: v('secondary-foreground'),
   textOnDanger: v('destructive-foreground'),
   textOnSuccess: v('card'),
 
   backgroundPage: v('background'),
   backgroundWhite: v('card'), // cards, dialogs, dropdowns, focused inputs
-  backgroundDarkPrimary: mix(v('primary'), 82, 'black'), // the left bar
   backgroundMedium: mix(v('muted'), 92, v('foreground')), // tags, neutral statuses
   backgroundLight: mix(v('muted'), 96, v('foreground')), // hover
   backgroundLightest: v('muted'), // sidebar, board columns, inputs

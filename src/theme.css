@@ -45,11 +45,14 @@
   --hover-foreground: 23 43 77;
 
   /* Brand (the wizard's palette) */
-  --primary: 0 82 204; /* buttons, links, In progress, the left bar (darkened) */
+  --primary: 0 82 204; /* buttons, links, In progress, focus */
   --primary-foreground: 255 255 255;
   --ring: 76 154 255; /* focus ring */
-  --accent: 0 82 204; /* the roadmap's Today marker */
+  --secondary: 7 71 166; /* the left bar */
+  --secondary-foreground: 255 255 255;
+  --accent: 0 82 204; /* active sidebar link, project tile, the roadmap's Today label */
   --accent-foreground: 255 255 255;
+  --accent-strong: 0 82 204; /* accent as text or lines (the Today line) */
 
   /* Meaning (keep them recognisable: green = done, amber = warning, red = danger) */
   --success: 11 135 91;
@@ -77,8 +80,11 @@
   --primary: 76 154 255;
   --primary-foreground: 255 255 255;
   --ring: 76 154 255;
+  --secondary: 30 58 138;
+  --secondary-foreground: 255 255 255;
   --accent: 76 154 255;
-  --accent-foreground: 255 255 255;
+  --accent-foreground: 17 17 17;
+  --accent-strong: 76 154 255;
 
   --success: 74 222 128;
   --warning: 250 204 21;

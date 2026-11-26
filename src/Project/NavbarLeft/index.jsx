@@ -15,7 +15,7 @@ const propTypes = {
 const ProjectNavbarLeft = ({ issueSearchModalOpen, issueCreateModalOpen }) => (
   <NavLeft>
     <LogoLink to="/">
-      <StyledLogo color={color.textOnPrimary} />
+      <StyledLogo color={color.textOnSecondary} />
     </LogoLink>
 
     <Item onClick={issueSearchModalOpen}>

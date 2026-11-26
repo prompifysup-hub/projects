@@ -31,8 +31,8 @@ const Tile = styled.span`
   width: ${props => props.size}px;
   height: ${props => props.size}px;
   border-radius: var(--radius, 3px);
-  color: ${color.textOnPrimary};
-  background: ${color.primary};
+  color: ${color.textOnAccent};
+  background: ${color.accent};
   ${font.bold}
   font-size: ${props => Math.round(props.size * 0.5)}px;
 `;
